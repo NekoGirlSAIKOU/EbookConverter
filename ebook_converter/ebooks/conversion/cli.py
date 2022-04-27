@@ -7,6 +7,7 @@ import mimetypes
 import numbers
 import optparse
 import os
+from typing import Optional
 import pkg_resources
 import re
 import sys
@@ -270,7 +271,7 @@ class ProgressBar(object):
             self.log('%d%% %s' % (percent, msg))
 
 
-def create_option_parser(args, log):
+def create_option_parser(args, log, reporter: Optional[ProgressBar] = None):
     if '--version' in args:
         from ebook_converter.constants_old import __appname__
         from ebook_converter.constants_old import __author__
@@ -302,8 +303,8 @@ def create_option_parser(args, log):
     input_file, output_file = check_command_line_options(parser, args, log)
 
     from ebook_converter.ebooks.conversion.plumber import Plumber
-
-    reporter = ProgressBar(log)
+    if not reporter:
+        reporter = ProgressBar(log)
     if os.path.abspath(input_file) == os.path.abspath(output_file):
         raise ValueError('Input file is the same as the output file')
 
@@ -351,11 +352,12 @@ def read_sr_patterns(path, log=None):
     return json.dumps(pats)
 
 
-def main(args=sys.argv):
-    log = Log()
+def main(args=sys.argv, log: Optional[Log] = None, reporter: Optional[ProgressBar] = None):
+    if not log:
+        log = Log()
     mimetypes.init([pkg_resources.resource_filename('ebook_converter',
                                                     'data/mime.types')])
-    parser, plumber = create_option_parser(args, log)
+    parser, plumber = create_option_parser(args, log, reporter)
     opts, leftover_args = parser.parse_args(args)
     if len(leftover_args) > 3:
         log.error('Extra arguments not understood: %s',
