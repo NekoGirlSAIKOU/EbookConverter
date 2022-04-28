@@ -47,7 +47,9 @@ Currently, following formats are supported:
 # Build
 Install required packages for buildozer:
 ```shell
-sudo apt install libssl-dev libffi-dev libltdl-dev autoconf automake
+sudo apt install zlib1g-dev libssl-dev libffi-dev \
+ libltdl-dev autoconf automake zip cmake pkg-config
+pip install cython
 ```
 Install buildozer:
 ```shell
@@ -57,9 +59,3 @@ Build:
 ```shell
 buildozer android debug deploy run
 ```
-
-# Requirements
-- kivy
-- kivymd
-- pillow
-- plyer

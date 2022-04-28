@@ -1,0 +1,34 @@
+<MainScreen>:
+    btn_select: btn_select
+    btn_convert: btn_convert
+    label_message: label_message
+    BoxLayout:
+        orientation: 'vertical'
+        MDRectangleFlatButton:
+            id: btn_select
+            text: "Select ebook to convert"
+            on_release:
+                # btn_convert.disabled = False # Should be disabled after selecting a file.
+                root.select_file_to_convert()
+        MDRectangleFlatButton:
+            id: btn_convert
+            text: "Convert"
+            disabled: True
+            on_release:
+                btn_select.disabled = True
+                self.disabled = True
+                root.start_convert()
+        MDRectangleFlatButton:
+            text: "Test Load Modules"
+            on_release:
+                root.test_load_modules()
+        MDLabel:
+            id: label_message
+            text: 'widget测试'
+            adaptive_height: True
+
+
+<Widget>:
+    font_name: "NotoSansCJK-Regular.ttc"
+
+MainScreen:
