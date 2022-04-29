@@ -121,7 +121,6 @@ class MainScreen(Screen):
             import kivymd
             import plyer
             import chardet
-            import html5_parser
         except Exception as e:
             self.label_message.text = str(e)
         else:
