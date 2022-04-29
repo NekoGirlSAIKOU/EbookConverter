@@ -5,6 +5,7 @@ from pathlib import Path
 from threading import Thread
 from typing import Optional, Dict, Union
 
+from kivy.clock import mainthread
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
@@ -145,6 +146,7 @@ class ConvertBottomNavigationPage(ScrollView):
                 file_paths = self.file_chooser.open_file()
                 self.on_open_file(file_paths)
 
+    @mainthread # Android may callback this on other thread.
     def on_open_file(self, file_path):
         if file_path:
             file_path = file_path[0]
