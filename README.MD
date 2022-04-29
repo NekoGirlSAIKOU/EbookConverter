@@ -11,8 +11,8 @@ its newest source code seems broken.
 Not tested.
 Currently, following formats are supported:
 
-- Microsoft Word 2007 and up (``docx``)
-- EPUB, both v2 and v3 (``epub``)
+- Microsoft Word 2007 and up (``docx``)(**may not work**)
+- EPUB, both v2 and v3 (``epub``)(**work**)
 - LibreOffice (``odt``)
 - Pure text files (``txt``)
 - Several PalmOS (``pdb``) readers support:
@@ -39,7 +39,7 @@ Currently, following formats are supported:
 
 - Broadband eBooks (shortened as BBeB) (``lrf``)
 - EPUB v2 (``epub``)
-- Mobipocket (``mobi``)
+- Mobipocket (``mobi``)(**work**)
 - Microsoft Word (``docx``)
 - zipped HTML file with additional assets, like images (``htmlz``)
 - Text (``txt``)

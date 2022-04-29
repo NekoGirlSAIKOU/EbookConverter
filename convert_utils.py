@@ -1,3 +1,4 @@
+import mimetypes
 from threading import Thread
 
 from ebook_converter.ebooks.conversion.cli import ProgressBar
@@ -46,11 +47,14 @@ class ConvertThread(Thread):
 
     def run(self) -> None:
         try:
-            from ebook_converter.main import main as ebook_converter_main
-
+            from ebook_converter.ebooks.conversion.cli import main as ebook_converter_main
+            import pkg_resources
+            mimetypes.init([pkg_resources.resource_filename('ebook_converter',
+                                                            'data/mime.types')])
             # For unknown reason without these imports calibre will fail to import this module on android
             import ebook_converter.ebooks.metadata.book.json_codec
-            #import ebook_converter.ebooks.docx.to_html
+            import ebook_converter.ebooks.docx.to_html
+            import ebook_converter.ebooks.unihandecode.unidecoder
 
             ebook_converter_main(args=self.args, log=self.log, reporter=self.reporter)
         except Exception as e:
