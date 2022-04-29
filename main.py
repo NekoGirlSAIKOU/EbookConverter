@@ -3,21 +3,23 @@ import os
 import sys
 from pathlib import Path
 from threading import Thread
-from typing import Optional
+from typing import Optional, Dict, Union
 
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.uix.scrollview import ScrollView
 from kivymd.app import MDApp
-from kivymd.uix.button import MDRectangleFlatButton
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDRectangleFlatButton, MDFlatButton
 from kivymd.uix.label import MDLabel, MDIcon
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.progressbar import MDProgressBar
 from kivymd.uix.toolbar import MDToolbar, MDActionTopAppBarButton
 from plyer.utils import platform
 
+from format_setting_ui import MobiOutputSettingUi, BaseSettingUi
 from utils_platform import get_file_chooser
 import hooks_calibre
 import hooks_plyer
@@ -36,18 +38,81 @@ MDLabel.font_name = "NotoSansCJK-Regular.ttc"
 MDActionTopAppBarButton.font_name = "fonts/materialdesignicons-webfont.ttf"
 MDIcon.font_name = "fonts/materialdesignicons-webfont.ttf"
 
-class MyBoxLayout(BoxLayout):
-    def my_callback(self):
-        print("Hello")
+
+class InputBottomNavigationPage(MDBoxLayout):
+    label_tip: MDLabel = ObjectProperty()
+    scroll_view: ScrollView = ObjectProperty()
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self._input_format: Optional[str] = None
+        self.input_setting_map: Dict[str, Optional[Union[str, bool]]] = {}
+
+    @property
+    def input_format(self):
+        return self._input_format
+
+    @input_format.setter
+    def input_format(self, value):
+        self._input_format = value
+        self.label_tip.text = f"Input setting for {value}:"
+
+    @property
+    def input_setting(self):
+        r = []
+        for i in self.input_setting_map.items():
+            if isinstance(i[1], bool):
+                if i[1]:
+                    r.append(i[0])
+            else:
+                if i[1]:
+                    r.append(i[0])
+                    r.append(i[1])
+        return r
+
+    def update_setting(self):
+        """update setting to save UI changes"""
+        pass
 
 
 class ConvertBottomNavigationPage(ScrollView):
+    input_bottom_navigation_page: InputBottomNavigationPage = ObjectProperty()
+    output_bottom_navigation_page: OutputBottomNavigationPage = ObjectProperty()
+
     btn_select: MDRectangleFlatButton = ObjectProperty()
     btn_convert: MDRectangleFlatButton = ObjectProperty()
     label_message: Label = ObjectProperty()
     progress_bar: MDProgressBar = ObjectProperty()
     label_log: MDLabel = ObjectProperty()
     file_chooser = get_file_chooser()
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.file_path = None
+
+    @property
+    def input_format(self):
+        return self.input_bottom_navigation_page.input_format
+
+    @input_format.setter
+    def input_format(self, value):
+        self.input_bottom_navigation_page.input_format = value
+
+    @property
+    def output_format(self):
+        return self.output_bottom_navigation_page.output_format
+
+    @property
+    def input_setting(self):
+        return self.input_bottom_navigation_page.input_setting
+
+    @property
+    def output_setting(self):
+        return self.output_bottom_navigation_page.output_setting
+
+    def update_setting(self):
+        self.input_bottom_navigation_page.update_setting()
+        self.output_bottom_navigation_page.update_setting()
 
     def select_file_to_convert(self):
         self.file_path = None
@@ -60,9 +125,12 @@ class ConvertBottomNavigationPage(ScrollView):
 
     def on_open_file(self, file_path):
         if file_path:
-            self.file_path = file_path[0]
-            self.log(f"Select input file: {file_path[0]}")
+            file_path = file_path[0]
+            self.file_path = file_path
+            self.log(f"Select input file: {file_path}")
             self.btn_convert.disabled = False
+            self.get_root_window()
+            self.input_format = file_path[file_path.rfind('.') + 1:]
 
     def start_convert(self):
         from utils_convert import MyProgressBar, MyLog
@@ -71,7 +139,13 @@ class ConvertBottomNavigationPage(ScrollView):
         self.progress_bar.value = 0
         log = MyLog(print_call_back=self.on_log_callback)
         progress = MyProgressBar(log, progress_call_back=self.on_progress_changed)
-        args = ["ebook-convert", self.file_path, self.file_path + '.mobi']
+        self.update_setting()
+        log.info("Input format setting: ", self.input_setting)
+        log.info("Output format setting: ", self.output_setting)
+        args = ["ebook-convert", self.file_path,
+                self.file_path + '.' + self.output_bottom_navigation_page.output_format]
+        args.extend(self.input_setting)
+        args.extend(self.output_setting)
         self.log('Start converting')
         self.log(f"args: {args}")
 
@@ -116,15 +190,81 @@ class ConvertBottomNavigationPage(ScrollView):
         self.label_log.text = ' '.join(list(str(i) for i in args)) + '\n' + self.label_log.text
 
 
+class OutputBottomNavigationPage(MDBoxLayout):
+    btn_choose_format: MDFlatButton = ObjectProperty()
+    menu_formats: MDDropdownMenu = ObjectProperty()
+    scroll_view: ScrollView = ObjectProperty()
+    SUPPORTED_OUTPUT_FORMATS = ['epub', 'mobi']
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.current_setting_ui: Optional[BaseSettingUi] = None
+        self._output_format = 'mobi'
+        self.output_setting_map: Dict[str, Optional[Union[str, bool]]] = {}
+        self.menu_formats = MDDropdownMenu(width_mult=4)
+        self.menu_formats.items = list({
+                                           "viewclass": "OneLineListItem",
+                                           "text": format,
+                                           "on_release": lambda x=format: self.on_format_chosen(x),
+                                       } for format in self.SUPPORTED_OUTPUT_FORMATS)
+
+    @property
+    def output_format(self):
+        return self._output_format
+
+    @output_format.setter
+    def output_format(self, value):
+        self._output_format = value
+        self.btn_choose_format.text = f"Choose output format: {value}"
+
+        if self.current_setting_ui:
+            self.update_setting()
+            print(self.output_setting_map)
+            self.scroll_view.remove_widget(self.current_setting_ui)
+            pass
+        if value == 'epub':
+            self.current_setting_ui = BaseSettingUi(self.output_setting_map)
+        elif value == 'mobi':
+            self.current_setting_ui = MobiOutputSettingUi(self.output_setting_map)
+        else:
+            self.current_setting_ui = BaseSettingUi(self.output_setting_map)
+
+        self.current_setting_ui.fill_settings()
+        self.scroll_view.add_widget(self.current_setting_ui)
+        self.current_setting_ui.update_ui()
+
+    def on_format_chosen(self, value):
+        self.menu_formats.dismiss()
+        self.output_format = value
+
+    @property
+    def output_setting(self):
+        r = []
+        for item in self.output_setting_map.items():
+            if item[0] in self.current_setting_ui.support_settings:
+                if isinstance(item[1], bool):
+                    if item[1]:
+                        r.append(item[0])
+                else:
+                    if item[1]:
+                        r.append(item[0])
+                        r.append(item[1])
+        return r
+
+    def update_setting(self):
+        """update setting to save UI changes"""
+        self.current_setting_ui.update_setting()
+
+
 class MainScreen(Screen):
     toolbar_menu: MDDropdownMenu = ObjectProperty()
-
-    convert_navigation_item: ConvertBottomNavigationPage = ObjectProperty()
+    input_bottom_navigation_page: InputBottomNavigationPage = ObjectProperty()
+    convert_bottom_navigation_page: ConvertBottomNavigationPage = ObjectProperty()
+    output_bottom_navigation_page: OutputBottomNavigationPage = ObjectProperty()
 
     def __init__(self, app: MainApp, **kw):
         super().__init__(**kw)
         self.app = app
-        self.file_path: Optional[str] = None
         self.convert_thread: Optional[Thread] = None
         self.toolbar_menu = MDDropdownMenu(width_mult=4)
         self.toolbar_menu.items = [
@@ -134,6 +274,10 @@ class MainScreen(Screen):
                 "on_release": self.on_setting_menu_clicked,
             }
         ]
+
+    @property
+    def file_path(self):
+        return self.convert_bottom_navigation_page.file_path
 
     def on_toolbar_menu_clicked(self, button):
         self.toolbar_menu.caller = button
@@ -160,17 +304,23 @@ class SettingScreen(Screen):
 class MainApp(MDApp):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.main_screen: Optional[MainScreen] = None
         self.sm: Optional[ScreenManager] = None
 
     def build(self):
+        self.main_screen = MainScreen(self)
         self.sm = ScreenManager()
-        self.sm.add_widget(MainScreen(self))
+        self.sm.add_widget(self.main_screen)
         return self.sm
+
+    def on_start(self):
+        self.main_screen.output_bottom_navigation_page.output_format = 'mobi'
 
     def on_pause(self):
         return True
 
     def on_stop(self):
+        self.main_screen = None
         self.sm = None
 
 

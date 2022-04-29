@@ -1,5 +1,7 @@
 <MainScreen>:
+    input_bottom_navigation_page: input_bottom_navigation_page
     convert_bottom_navigation_page: convert_bottom_navigation_page
+    output_bottom_navigation_page: output_bottom_navigation_page
     MDBoxLayout:
         orientation: 'vertical'
         MDToolbar:
@@ -10,16 +12,22 @@
                 name: 'input'
                 text: 'Input'
                 icon: 'arrow-down'
+                InputBottomNavigationPage:
+                    id: input_bottom_navigation_page
             MDBottomNavigationItem:
                 name: 'main'
                 text: 'Conversion'
                 icon: 'home'
                 ConvertBottomNavigationPage:
-                    id:convert_bottom_navigation_page
+                    input_bottom_navigation_page: input_bottom_navigation_page
+                    output_bottom_navigation_page: output_bottom_navigation_page
+                    id: convert_bottom_navigation_page
             MDBottomNavigationItem:
                 name: 'output'
                 text: 'Output'
                 icon: 'arrow-up'
+                OutputBottomNavigationPage:
+                    id: output_bottom_navigation_page
 
 
 
@@ -53,8 +61,8 @@
     label_log: label_log
     MDBoxLayout:
         orientation: 'vertical'
-        padding: dp(48)
-        spacing: dp(15)
+        padding: dp(32)
+        spacing: dp(10)
         adaptive_height: True
         MDRectangleFlatButton:
             id: btn_select
@@ -96,3 +104,34 @@
             id: label_log
             adaptive_height: True
             text: "Logs."
+
+<InputBottomNavigationPage>:
+    label_tip: label_tip
+    scroll_view: scroll_view
+    orientation: 'vertical'
+    padding: dp(32)
+    spacing: dp(10)
+    MDLabel:
+        id: label_tip
+        adaptive_height: True
+        text: "Input setting for None:"
+    ScrollView:
+        id: scroll_view
+
+<OutputBottomNavigationPage>:
+    btn_choose_format: btn_choose_format
+    scroll_view: scroll_view
+    orientation: 'vertical'
+    padding: dp(32)
+    spacing: dp(10)
+    #adaptive_height: True
+    MDFlatButton:
+        id: btn_choose_format
+        text: "Choose output format: mobi"
+        #pos_hint: {"center_x": 0.5}
+        on_release:
+            root.menu_formats.caller = self
+            root.menu_formats.open()
+    ScrollView:
+        id: scroll_view
+
