@@ -51,10 +51,19 @@ class ConvertThread(Thread):
             import pkg_resources
             mimetypes.init([pkg_resources.resource_filename('ebook_converter',
                                                             'data/mime.types')])
+
             # For unknown reason without these imports calibre will fail to import this module on android
             import ebook_converter.ebooks.metadata.book.json_codec
             import ebook_converter.ebooks.docx.to_html
             import ebook_converter.ebooks.unihandecode.unidecoder
+            import ebook_converter.ebooks.txt
+            import ebook_converter.ebooks.txt.processor
+            import ebook_converter.ebooks.metadata.meta
+            import ebook_converter.ebooks.metadata.html
+            import ebook_converter.ebooks.oeb.transforms.metadata
+            import ebook_converter.ebooks.html.input
+            import ebook_converter.ebooks.conversion.utils
+            import ebook_converter.utils.smartypants
 
             ebook_converter_main(args=self.args, log=self.log, reporter=self.reporter)
         except Exception as e:

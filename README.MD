@@ -14,7 +14,7 @@ Currently, following formats are supported:
 - Microsoft Word 2007 and up (``docx``)(**may not work**)
 - EPUB, both v2 and v3 (``epub``)(**work**)
 - LibreOffice (``odt``)
-- Pure text files (``txt``)
+- Pure text files (``txt``)(**work**)
 - Several PalmOS (``pdb``) readers support:
 
   - Plucker
@@ -48,7 +48,8 @@ Currently, following formats are supported:
 Install required packages for buildozer:
 ```shell
 sudo apt install zlib1g-dev libssl-dev libffi-dev \
- libltdl-dev autoconf automake zip cmake pkg-config
+ libltdl-dev autoconf automake zip cmake pkg-config \
+ libxml2-dev 
 pip install cython
 ```
 Install buildozer:

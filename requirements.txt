@@ -12,3 +12,4 @@ tinycss>=0.4
 kivy
 kivymd
 plyer
+chardet

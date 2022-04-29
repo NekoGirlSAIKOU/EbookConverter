@@ -37,7 +37,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,kivymd,plyer,tinycss>=0.4,odfpy>=1.4.1,msgpack>=1.0.0,html2text>=2020.1.16,filelock>=3.0.12,beautifulsoup4>=4.9.3,lxml==3.6.4,css-parser>=1.0.6,python-dateutil>=2.8.1,pillow>=8.0.1
+requirements = python3,kivy,kivymd,chardet,plyer,tinycss>=0.4,odfpy>=1.4.1,msgpack>=1.0.0,html2text>=2020.1.16,filelock>=3.0.12,beautifulsoup4>=4.9.3,lxml==3.6.4,css-parser>=1.0.6,python-dateutil>=2.8.1,pillow>=8.0.1
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
