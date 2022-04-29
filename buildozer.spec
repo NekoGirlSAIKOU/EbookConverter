@@ -13,10 +13,10 @@ package.domain = app.nekogirlsaikou
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg,kv,atlas,css,xhtml,xsl,json,types,html,txt
+source.include_exts = py,png,jpg,kv,atlas,css,xhtml,xsl,json,types,html,txt,ttf
 
 # (list) List of inclusions using pattern matching
-source.include_patterns = assets/*,images/*.png,ebook_converter/data/*
+source.include_patterns = assets/*,images/*.png,ebook_converter/data/*,fonts/*
 
 # (list) Source files to exclude (let empty to not exclude anything)
 #source.exclude_exts = spec, epub, mobi

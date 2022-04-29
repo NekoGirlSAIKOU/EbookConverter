@@ -1,3 +1,4 @@
+from __future__ import annotations
 import os
 import sys
 from pathlib import Path
@@ -7,15 +8,18 @@ from typing import Optional
 from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
-from kivy.uix.screenmanager import Screen
+from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
 from kivymd.uix.button import MDRectangleFlatButton
 from kivymd.uix.label import MDLabel
+from kivymd.uix.menu import MDMenu, MDDropdownMenu
 from kivymd.uix.progressbar import MDProgressBar
+from kivymd.uix.toolbar import MDToolbar, MDActionTopAppBarButton
 from plyer.utils import platform
 
 from platform_utils import get_file_chooser
-import calibre_hooks  # Enable hooks
+import calibre_hooks
+import plyer_hooks
 
 if getattr(sys, "frozen", False):  # bundle mode with PyInstaller
     os.environ["EBOOK_CONVERTER_ROOT"] = sys._MEIPASS
@@ -24,6 +28,9 @@ else:
     os.environ["EBOOK_CONVERTER_ROOT"] = str(Path(__file__).parent.absolute())
 
 calibre_hooks.hook()
+plyer_hooks.hook()
+# For unknown reason it won't display icons properly without this. It should load it automatically.
+MDActionTopAppBarButton.font_name = "fonts/materialdesignicons-webfont.ttf"
 
 
 class MyBoxLayout(BoxLayout):
@@ -32,6 +39,9 @@ class MyBoxLayout(BoxLayout):
 
 
 class MainScreen(Screen):
+    NAME = "MainScreen"
+    toolbar_menu: MDDropdownMenu = ObjectProperty()
+    toolbar: MDToolbar = ObjectProperty()
     btn_select: MDRectangleFlatButton = ObjectProperty()
     btn_convert: MDRectangleFlatButton = ObjectProperty()
     label_message: Label = ObjectProperty()
@@ -39,10 +49,19 @@ class MainScreen(Screen):
     label_log: MDLabel = ObjectProperty()
     file_chooser = get_file_chooser()
 
-    def __init__(self, **kw):
+    def __init__(self, app: MainApp, **kw):
         super().__init__(**kw)
+        self.app = app
         self.file_path: Optional[str] = None
         self.convert_thread: Optional[Thread] = None
+        self.toolbar_menu = MDDropdownMenu(width_mult=4)
+        self.toolbar_menu.items = [
+            {
+                "viewclass": "OneLineListItem",
+                "text": "Setting",
+                "on_release": self.on_setting_menu_clicked,
+            }
+        ]
 
     def select_file_to_convert(self):
         self.file_path = None
@@ -62,8 +81,6 @@ class MainScreen(Screen):
     def start_convert(self):
         from convert_utils import MyProgressBar, MyLog
         from convert_utils import ConvertThread
-        # For unknown reason without this calibre will fail to import this module on android
-        import ebook_converter.ebooks.metadata.book.json_codec
         self.label_message.text = "Converting"
         self.progress_bar.value = 0
         log = MyLog(print_call_back=self.on_log_callback)
@@ -108,16 +125,46 @@ class MainScreen(Screen):
         else:
             self.label_message.text = "All modules can be imported."
 
-    def on_menu_clocked(self):
-        pass
+    def on_toolbar_menu_clicked(self, button):
+        self.toolbar_menu.caller = button
+        self.toolbar_menu.open()
+
+    def on_setting_menu_clicked(self):
+        self.toolbar_menu.dismiss()
+        self.app.sm.switch_to(screen=SettingScreen(self.app,self))
 
     def log(self, *args):
         self.label_log.text = ' '.join(list(str(i) for i in args)) + '\n' + self.label_log.text
 
 
+class SettingScreen(Screen):
+    app = ObjectProperty()
+    parent_screen = ObjectProperty()
+
+    def __init__(self, app:MainApp, parent_screen: Screen, **kw):
+        super().__init__(**kw)
+        self.app = app
+        self.parent_screen = parent_screen
+
+    def on_leave_button_clicked(self):
+        self.app.sm.switch_to(self.parent_screen, direction='left')
+
 
 class MainApp(MDApp):
-    pass
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.sm: Optional[ScreenManager] = None
+
+    def build(self):
+        self.sm = ScreenManager()
+        self.sm.add_widget(MainScreen(self))
+        return self.sm
+
+    def on_pause(self):
+        return True
+
+    def on_stop(self):
+        self.sm = None
 
 
 if __name__ == '__main__':

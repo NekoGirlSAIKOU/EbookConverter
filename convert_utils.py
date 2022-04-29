@@ -47,11 +47,17 @@ class ConvertThread(Thread):
     def run(self) -> None:
         try:
             from ebook_converter.main import main as ebook_converter_main
+
+            # For unknown reason without these imports calibre will fail to import this module on android
+            import ebook_converter.ebooks.metadata.book.json_codec
+            #import ebook_converter.ebooks.docx.to_html
+
             ebook_converter_main(args=self.args, log=self.log, reporter=self.reporter)
         except Exception as e:
             if isinstance(self.reporter, MyProgressBar) and self.reporter.call_back is not ...:
                 self.reporter.call_back(100, f"Failed: {type(e).__name__}: {e}")
                 self.log.error(f"Failed: {type(e).__name__}: {e}")
+            raise
         else:
             if isinstance(self.reporter, MyProgressBar) and self.reporter.call_back is not ...:
                 self.reporter.call_back(100, "Finished")
