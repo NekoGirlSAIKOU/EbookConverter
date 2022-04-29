@@ -17,9 +17,9 @@ from kivymd.uix.progressbar import MDProgressBar
 from kivymd.uix.toolbar import MDToolbar, MDActionTopAppBarButton
 from plyer.utils import platform
 
-from platform_utils import get_file_chooser
-import calibre_hooks
-import plyer_hooks
+from utils_platform import get_file_chooser
+import hooks_calibre
+import hooks_plyer
 
 if getattr(sys, "frozen", False):  # bundle mode with PyInstaller
     os.environ["EBOOK_CONVERTER_ROOT"] = sys._MEIPASS
@@ -27,8 +27,8 @@ else:
     sys.path.append(os.path.abspath(__file__).split("demos")[0])
     os.environ["EBOOK_CONVERTER_ROOT"] = str(Path(__file__).parent.absolute())
 
-calibre_hooks.hook()
-plyer_hooks.hook()
+hooks_calibre.hook()
+hooks_plyer.hook()
 # For unknown reason it won't display icons properly without this. It should load it automatically.
 MDActionTopAppBarButton.font_name = "fonts/materialdesignicons-webfont.ttf"
 
@@ -79,8 +79,8 @@ class MainScreen(Screen):
             self.btn_convert.disabled = False
 
     def start_convert(self):
-        from convert_utils import MyProgressBar, MyLog
-        from convert_utils import ConvertThread
+        from utils_convert import MyProgressBar, MyLog
+        from utils_convert import ConvertThread
         self.label_message.text = "Converting"
         self.progress_bar.value = 0
         log = MyLog(print_call_back=self.on_log_callback)
