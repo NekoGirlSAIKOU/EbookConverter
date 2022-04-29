@@ -5,19 +5,38 @@ from kivy.properties import ObjectProperty
 from kivymd.uix.list import MDList
 from kivymd.uix.textfield import MDTextField
 
-Builder.load_file('format_setting_ui/BaseSettingUi.kv')
+Builder.load_file('format_setting_ui/BaseOutputSettingUi.kv')
 Builder.load_file('format_setting_ui/MobiOutputSettingUi.kv')
 
 
 class BaseSettingUi(MDList):
-    tf_book_title: MDTextField = ObjectProperty()
-
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(**kwargs)
         self.setting_map = setting_map
         self.support_settings = [
-            '--title'
         ]
+
+    def fill_settings(self):
+        """FIll settings map using default settings"""
+        pass
+
+    def update_ui(self):
+        """Update UI to show updated setting"""
+        pass
+
+    def update_setting(self):
+        """update setting to save UI changes"""
+        pass
+
+
+class BaseOutputSettingUi(BaseSettingUi):
+    tf_book_title: MDTextField = ObjectProperty()
+
+    def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
+        super().__init__(setting_map, **kwargs)
+        self.support_settings.extend([
+            '--title'
+        ])
 
     def fill_settings(self):
         """FIll settings map using default settings"""
@@ -29,11 +48,11 @@ class BaseSettingUi(MDList):
 
     def update_setting(self):
         """update setting to save UI changes"""
-        print('update_setting: save tf_book_title: ',self.tf_book_title.text)
+        print('update_setting: save tf_book_title: ', self.tf_book_title.text)
         self.setting_map['--title'] = self.tf_book_title.text
 
 
-class MobiOutputSettingUi(BaseSettingUi):
+class MobiOutputSettingUi(BaseOutputSettingUi):
     tf_file_type: MDTextField = ObjectProperty()
 
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
