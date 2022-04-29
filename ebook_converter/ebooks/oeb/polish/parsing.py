@@ -1,7 +1,10 @@
 import re
 
 from lxml import etree
-import html5_parser
+try:
+    import html5_parser
+except:
+    html5_parser = None
 
 from ebook_converter import constants as const
 from ebook_converter import xml_replace_entities
@@ -13,6 +16,8 @@ from ebook_converter.utils.cleantext import clean_xml_chars
 def parse_html5(raw, decoder=None, log=None, discard_namespaces=False,
                 line_numbers=True, linenumber_attribute=None,
                 replace_entities=True, fix_newlines=True):
+    if not html5_parser:
+        raise RuntimeError("No html5_parser installed")
     if isinstance(raw, bytes):
         raw = xml_to_unicode(raw)[0] if decoder is None else decoder(raw)
     if replace_entities:

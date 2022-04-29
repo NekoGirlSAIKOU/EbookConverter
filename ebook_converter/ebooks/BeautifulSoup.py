@@ -1,17 +1,16 @@
 # License: GPLv3 Copyright: 2019, Kovid Goyal <kovid at kovidgoyal.net>
-is_html5_parser_exists = True
 import bs4
 try:
     from html5_parser import soup as html5_soup
 except:
-    is_html5_parser_exists = False
+    html5_soup = None
 
 from ebook_converter.ebooks import chardet
 from ebook_converter.utils import cleantext
 
 
 def parse_html(markup):
-    if not is_html5_parser_exists:
+    if not html5_soup:
         raise RuntimeError("No html5_parser")
 
     if isinstance(markup, str):
