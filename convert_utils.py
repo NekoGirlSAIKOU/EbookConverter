@@ -1,3 +1,5 @@
+from threading import Thread
+
 from ebook_converter.ebooks.conversion.cli import ProgressBar
 from ebook_converter.utils.logging import Log
 
@@ -25,7 +27,7 @@ class MyLog(Log):
             self.print_call_back(level, *args, **kwargs)
         if level < self.filter_level:
             return
-        print(*args, **kwargs)
+        print(level, *args, **kwargs)
 
     def print_with_flush(self, level, *args, **kwargs):
         if self.print_call_back is not ...:
@@ -33,3 +35,23 @@ class MyLog(Log):
         if level < self.filter_level:
             return
         print(*args, **kwargs)
+
+
+class ConvertThread(Thread):
+    def __init__(self, args: list, log: Log, reporter: ProgressBar):
+        super().__init__()
+        self.args = args
+        self.log = log
+        self.reporter = reporter
+
+    def run(self) -> None:
+        try:
+            from ebook_converter.main import main as ebook_converter_main
+            ebook_converter_main(args=self.args, log=self.log, reporter=self.reporter)
+        except Exception as e:
+            if isinstance(self.reporter, MyProgressBar) and self.reporter.call_back is not ...:
+                self.reporter.call_back(100, f"Failed: {type(e).__name__}: {e}")
+                self.log.error(f"Failed: {type(e).__name__}: {e}")
+        else:
+            if isinstance(self.reporter, MyProgressBar) and self.reporter.call_back is not ...:
+                self.reporter.call_back(100, "Finished")
