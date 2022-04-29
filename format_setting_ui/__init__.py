@@ -5,12 +5,14 @@ from kivy.properties import ObjectProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.list import MDList
 from kivymd.uix.textfield import MDTextField
+
 Builder.load_file('format_setting_ui/BaseSettingUi.kv')
 
 Builder.load_file('format_setting_ui/BaseOutputSettingUi.kv')
 Builder.load_file('format_setting_ui/MobiOutputSettingUi.kv')
 
 Builder.load_file('format_setting_ui/BaseInputSettingUi.kv')
+Builder.load_file('format_setting_ui/EpubInputSettingUi.kv')
 
 
 class BaseSettingUi(MDList):
@@ -84,18 +86,39 @@ class BaseInputSettingUi(BaseSettingUi):
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(setting_map, **kwargs)
         self.support_settings.extend([
-            '--title'
+
         ])
 
     def fill_settings(self):
         """FIll settings map using default settings"""
-        self.setting_map['--title'] = self.setting_map.get('--title', '')
+        pass
 
     def update_ui(self):
         """Update UI to show updated setting"""
-        self.tf_book_title.text = self.setting_map['--title']
+        pass
 
     def update_setting(self):
         """update setting to save UI changes"""
-        print('update_setting: save tf_book_title: ', self.tf_book_title.text)
-        self.setting_map['--title'] = self.tf_book_title.text
+        pass
+
+
+class EpubInputSettingUi(BaseInputSettingUi):
+    tf_input_encoding: MDTextField = ObjectProperty()
+
+    def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
+        super().__init__(setting_map, **kwargs)
+        self.support_settings.extend([
+            '--input-encoding'
+        ])
+
+    def fill_settings(self):
+        """FIll settings map using default settings"""
+        self.setting_map['--input-encoding'] = self.setting_map.get('--input-encoding', '')
+
+    def update_ui(self):
+        """Update UI to show updated setting"""
+        self.tf_input_encoding.text = self.setting_map['--input-encoding']
+
+    def update_setting(self):
+        """update setting to save UI changes"""
+        self.setting_map['--input-encoding'] = self.tf_input_encoding.text

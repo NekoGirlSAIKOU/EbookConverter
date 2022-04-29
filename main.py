@@ -19,7 +19,8 @@ from kivymd.uix.progressbar import MDProgressBar
 from kivymd.uix.toolbar import MDToolbar, MDActionTopAppBarButton
 from plyer.utils import platform
 
-from format_setting_ui import MobiOutputSettingUi, BaseSettingUi, BaseOutputSettingUi
+from format_setting_ui import MobiOutputSettingUi, BaseSettingUi, BaseOutputSettingUi, BaseInputSettingUi, \
+    EpubInputSettingUi
 from utils_platform import get_file_chooser
 import hooks_calibre
 import hooks_plyer
@@ -45,6 +46,8 @@ class InputBottomNavigationPage(MDBoxLayout):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.current_setting_ui: Optional[BaseSettingUi] = None
+
         self._input_format: Optional[str] = None
         self.input_setting_map: Dict[str, Optional[Union[str, bool]]] = {}
 
@@ -57,22 +60,38 @@ class InputBottomNavigationPage(MDBoxLayout):
         self._input_format = value
         self.label_tip.text = f"Input setting for {value}:"
 
+        if self.current_setting_ui:
+            self.update_setting()
+            self.scroll_view.remove_widget(self.current_setting_ui)
+            pass
+        if value == 'epub':
+            self.current_setting_ui = EpubInputSettingUi(self.input_setting_map)
+        elif value == 'mobi':
+            self.current_setting_ui = BaseInputSettingUi(self.input_setting_map)
+        else:
+            self.current_setting_ui = BaseInputSettingUi(self.input_setting_map)
+
+        self.current_setting_ui.fill_settings()
+        self.scroll_view.add_widget(self.current_setting_ui)
+        self.current_setting_ui.update_ui()
+
     @property
     def input_setting(self):
         r = []
-        for i in self.input_setting_map.items():
-            if isinstance(i[1], bool):
-                if i[1]:
-                    r.append(i[0])
-            else:
-                if i[1]:
-                    r.append(i[0])
-                    r.append(i[1])
+        for item in self.input_setting_map.items():
+            if item[0] in self.current_setting_ui.support_settings:
+                if isinstance(item[1], bool):
+                    if item[1]:
+                        r.append(item[0])
+                else:
+                    if item[1]:
+                        r.append(item[0])
+                        r.append(item[1])
         return r
 
     def update_setting(self):
         """update setting to save UI changes"""
-        pass
+        self.current_setting_ui.update_setting()
 
 
 class ConvertBottomNavigationPage(ScrollView):
@@ -199,8 +218,10 @@ class OutputBottomNavigationPage(MDBoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.current_setting_ui: Optional[BaseSettingUi] = None
+
         self._output_format = 'mobi'
         self.output_setting_map: Dict[str, Optional[Union[str, bool]]] = {}
+
         self.menu_formats = MDDropdownMenu(width_mult=4)
         self.menu_formats.items = list({
                                            "viewclass": "OneLineListItem",
@@ -219,7 +240,6 @@ class OutputBottomNavigationPage(MDBoxLayout):
 
         if self.current_setting_ui:
             self.update_setting()
-            print(self.output_setting_map)
             self.scroll_view.remove_widget(self.current_setting_ui)
             pass
         if value == 'epub':
@@ -314,6 +334,7 @@ class MainApp(MDApp):
         return self.sm
 
     def on_start(self):
+        self.main_screen.input_bottom_navigation_page.input_format = None
         self.main_screen.output_bottom_navigation_page.output_format = 'mobi'
 
     def on_pause(self):
