@@ -45,18 +45,15 @@ Currently, following formats are supported:
 - Text (``txt``)
 
 # Build
-Install required packages for buildozer:
+Install required packages:
 ```shell
 sudo apt install zlib1g-dev libssl-dev libffi-dev \
  libltdl-dev autoconf automake zip cmake pkg-config \
  libxml2-dev 
 pip install cython
-```
-Install buildozer:
-```shell
 pip install buildozer
 ```
 Build:
 ```shell
-buildozer android debug deploy run
+buildozer android debug
 ```
