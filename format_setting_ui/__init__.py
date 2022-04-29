@@ -19,7 +19,7 @@ class BaseSettingUi(MDList):
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(**kwargs)
         self.setting_map = setting_map
-        self.support_settings = [
+        self.supported_settings = [
         ]
 
     def fill_settings(self):
@@ -40,7 +40,7 @@ class BaseOutputSettingUi(BaseSettingUi):
 
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(setting_map, **kwargs)
-        self.support_settings.extend([
+        self.supported_settings.extend([
             '--title'
         ])
 
@@ -63,7 +63,7 @@ class MobiOutputSettingUi(BaseOutputSettingUi):
 
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(setting_map, **kwargs)
-        self.support_settings.extend([
+        self.supported_settings.extend([
             '--mobi-file-type'
         ])
 
@@ -85,7 +85,7 @@ class BaseInputSettingUi(BaseSettingUi):
 
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(setting_map, **kwargs)
-        self.support_settings.extend([
+        self.supported_settings.extend([
 
         ])
 
@@ -107,7 +107,7 @@ class EpubInputSettingUi(BaseInputSettingUi):
 
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(setting_map, **kwargs)
-        self.support_settings.extend([
+        self.supported_settings.extend([
             '--input-encoding'
         ])
 

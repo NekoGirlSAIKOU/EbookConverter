@@ -43,13 +43,13 @@ MDIcon.font_name = "fonts/materialdesignicons-webfont.ttf"
 class InputBottomNavigationPage(MDBoxLayout):
     label_tip: MDLabel = ObjectProperty()
     scroll_view: ScrollView = ObjectProperty()
+    convert_bottom_navigation_page: ConvertBottomNavigationPage = ObjectProperty()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.current_setting_ui: Optional[BaseSettingUi] = None
 
         self._input_format: Optional[str] = None
-        self.input_setting_map: Dict[str, Optional[Union[str, bool]]] = {}
 
     @property
     def input_format(self):
@@ -65,29 +65,24 @@ class InputBottomNavigationPage(MDBoxLayout):
             self.scroll_view.remove_widget(self.current_setting_ui)
             pass
         if value == 'epub':
-            self.current_setting_ui = EpubInputSettingUi(self.input_setting_map)
+            self.current_setting_ui = EpubInputSettingUi(self.setting_map)
         elif value == 'mobi':
-            self.current_setting_ui = BaseInputSettingUi(self.input_setting_map)
+            self.current_setting_ui = BaseInputSettingUi(self.setting_map)
         else:
-            self.current_setting_ui = BaseInputSettingUi(self.input_setting_map)
+            self.current_setting_ui = BaseInputSettingUi(self.setting_map)
 
         self.current_setting_ui.fill_settings()
         self.scroll_view.add_widget(self.current_setting_ui)
         self.current_setting_ui.update_ui()
 
     @property
-    def input_setting(self):
-        r = []
-        for item in self.input_setting_map.items():
-            if item[0] in self.current_setting_ui.support_settings:
-                if isinstance(item[1], bool):
-                    if item[1]:
-                        r.append(item[0])
-                else:
-                    if item[1]:
-                        r.append(item[0])
-                        r.append(item[1])
-        return r
+    def setting_map(self):
+        return self.convert_bottom_navigation_page.setting_map
+
+
+    @property
+    def supported_settings(self):
+        return self.current_setting_ui.supported_settings
 
     def update_setting(self):
         """update setting to save UI changes"""
@@ -108,6 +103,7 @@ class ConvertBottomNavigationPage(ScrollView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.file_path = None
+        self.setting_map: Dict[str, Optional[Union[str, bool]]] = {}
 
     @property
     def input_format(self):
@@ -121,17 +117,24 @@ class ConvertBottomNavigationPage(ScrollView):
     def output_format(self):
         return self.output_bottom_navigation_page.output_format
 
-    @property
-    def input_setting(self):
-        return self.input_bottom_navigation_page.input_setting
-
-    @property
-    def output_setting(self):
-        return self.output_bottom_navigation_page.output_setting
-
     def update_setting(self):
         self.input_bottom_navigation_page.update_setting()
         self.output_bottom_navigation_page.update_setting()
+
+    @property
+    def setting_list(self):
+        r = []
+        for item in self.setting_map.items():
+            if item[0] in self.input_bottom_navigation_page.supported_settings \
+                    or item[0] in self.output_bottom_navigation_page.supported_settings:
+                if isinstance(item[1], bool):
+                    if item[1]:
+                        r.append(item[0])
+                else:
+                    if item[1]:
+                        r.append(item[0])
+                        r.append(item[1])
+        return r
 
     def select_file_to_convert(self):
         self.file_path = None
@@ -159,12 +162,10 @@ class ConvertBottomNavigationPage(ScrollView):
         log = MyLog(print_call_back=self.on_log_callback)
         progress = MyProgressBar(log, progress_call_back=self.on_progress_changed)
         self.update_setting()
-        log.info("Input format setting: ", self.input_setting)
-        log.info("Output format setting: ", self.output_setting)
+        log.info("Convert setting: ", self.setting_list)
         args = ["ebook-convert", self.file_path,
                 self.file_path + '.' + self.output_bottom_navigation_page.output_format]
-        args.extend(self.input_setting)
-        args.extend(self.output_setting)
+        args.extend(self.setting_list)
         self.log('Start converting')
         self.log(f"args: {args}")
 
@@ -213,6 +214,7 @@ class OutputBottomNavigationPage(MDBoxLayout):
     btn_choose_format: MDFlatButton = ObjectProperty()
     menu_formats: MDDropdownMenu = ObjectProperty()
     scroll_view: ScrollView = ObjectProperty()
+    convert_bottom_navigation_page: ConvertBottomNavigationPage = ObjectProperty()
     SUPPORTED_OUTPUT_FORMATS = ['epub', 'mobi']
 
     def __init__(self, **kwargs):
@@ -220,7 +222,6 @@ class OutputBottomNavigationPage(MDBoxLayout):
         self.current_setting_ui: Optional[BaseSettingUi] = None
 
         self._output_format = 'mobi'
-        self.output_setting_map: Dict[str, Optional[Union[str, bool]]] = {}
 
         self.menu_formats = MDDropdownMenu(width_mult=4)
         self.menu_formats.items = list({
@@ -243,11 +244,11 @@ class OutputBottomNavigationPage(MDBoxLayout):
             self.scroll_view.remove_widget(self.current_setting_ui)
             pass
         if value == 'epub':
-            self.current_setting_ui = BaseOutputSettingUi(self.output_setting_map)
+            self.current_setting_ui = BaseOutputSettingUi(self.setting_map)
         elif value == 'mobi':
-            self.current_setting_ui = MobiOutputSettingUi(self.output_setting_map)
+            self.current_setting_ui = MobiOutputSettingUi(self.setting_map)
         else:
-            self.current_setting_ui = BaseOutputSettingUi(self.output_setting_map)
+            self.current_setting_ui = BaseOutputSettingUi(self.setting_map)
 
         self.current_setting_ui.fill_settings()
         self.scroll_view.add_widget(self.current_setting_ui)
@@ -258,18 +259,12 @@ class OutputBottomNavigationPage(MDBoxLayout):
         self.output_format = value
 
     @property
-    def output_setting(self):
-        r = []
-        for item in self.output_setting_map.items():
-            if item[0] in self.current_setting_ui.support_settings:
-                if isinstance(item[1], bool):
-                    if item[1]:
-                        r.append(item[0])
-                else:
-                    if item[1]:
-                        r.append(item[0])
-                        r.append(item[1])
-        return r
+    def setting_map(self):
+        return self.convert_bottom_navigation_page.setting_map
+
+    @property
+    def supported_settings(self):
+        return self.current_setting_ui.supported_settings
 
     def update_setting(self):
         """update setting to save UI changes"""

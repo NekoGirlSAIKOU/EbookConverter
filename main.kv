@@ -14,20 +14,22 @@
                 icon: 'arrow-down'
                 InputBottomNavigationPage:
                     id: input_bottom_navigation_page
+                    convert_bottom_navigation_page: convert_bottom_navigation_page
             MDBottomNavigationItem:
                 name: 'main'
                 text: 'Conversion'
                 icon: 'home'
                 ConvertBottomNavigationPage:
+                    id: convert_bottom_navigation_page
                     input_bottom_navigation_page: input_bottom_navigation_page
                     output_bottom_navigation_page: output_bottom_navigation_page
-                    id: convert_bottom_navigation_page
             MDBottomNavigationItem:
                 name: 'output'
                 text: 'Output'
                 icon: 'arrow-up'
                 OutputBottomNavigationPage:
                     id: output_bottom_navigation_page
+                    convert_bottom_navigation_page: convert_bottom_navigation_page
 
 
 
