@@ -5,7 +5,9 @@ import re
 import unittest
 
 from collections import defaultdict
-from html5_parser import parse
+# Use lxml instead of html5_parser because I can't install it to apk.
+# from html5_parser import parse
+from lxml import etree
 from lxml.etree import Comment
 
 from ebook_converter.ebooks.metadata import string_to_authors, authors_to_string
@@ -77,14 +79,13 @@ def handle_comment(data, comment_tags):
 
 
 def parse_metadata(src):
-    root = parse(src)
+    root:etree._Element = etree.fromstring(src)
     comment_tags = defaultdict(list)
     meta_tags = defaultdict(list)
     meta_tag_ids = defaultdict(list)
     title = ''
     identifier_pat = re.compile(r'(?:dc|dcterms)[.:]identifier(?:\.|$)', flags=re.IGNORECASE)
     id_pat2 = re.compile(r'(?:dc|dcterms)[.:]identifier$', flags=re.IGNORECASE)
-
     for comment in root.iterdescendants(tag=Comment):
         if comment.text:
             handle_comment(comment.text, comment_tags)
