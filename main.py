@@ -9,10 +9,11 @@ from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.uix.scrollview import ScrollView
 from kivymd.app import MDApp
 from kivymd.uix.button import MDRectangleFlatButton
-from kivymd.uix.label import MDLabel
-from kivymd.uix.menu import MDMenu, MDDropdownMenu
+from kivymd.uix.label import MDLabel, MDIcon
+from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.progressbar import MDProgressBar
 from kivymd.uix.toolbar import MDToolbar, MDActionTopAppBarButton
 from plyer.utils import platform
@@ -30,38 +31,23 @@ else:
 hooks_calibre.hook()
 hooks_plyer.hook()
 # For unknown reason it won't display icons properly without this. It should load it automatically.
+Label.font_name = "NotoSansCJK-Regular.ttc"
+MDLabel.font_name = "NotoSansCJK-Regular.ttc"
 MDActionTopAppBarButton.font_name = "fonts/materialdesignicons-webfont.ttf"
-
+MDIcon.font_name = "fonts/materialdesignicons-webfont.ttf"
 
 class MyBoxLayout(BoxLayout):
     def my_callback(self):
         print("Hello")
 
 
-class MainScreen(Screen):
-    NAME = "MainScreen"
-    toolbar_menu: MDDropdownMenu = ObjectProperty()
-    toolbar: MDToolbar = ObjectProperty()
+class ConvertBottomNavigationPage(ScrollView):
     btn_select: MDRectangleFlatButton = ObjectProperty()
     btn_convert: MDRectangleFlatButton = ObjectProperty()
     label_message: Label = ObjectProperty()
     progress_bar: MDProgressBar = ObjectProperty()
     label_log: MDLabel = ObjectProperty()
     file_chooser = get_file_chooser()
-
-    def __init__(self, app: MainApp, **kw):
-        super().__init__(**kw)
-        self.app = app
-        self.file_path: Optional[str] = None
-        self.convert_thread: Optional[Thread] = None
-        self.toolbar_menu = MDDropdownMenu(width_mult=4)
-        self.toolbar_menu.items = [
-            {
-                "viewclass": "OneLineListItem",
-                "text": "Setting",
-                "on_release": self.on_setting_menu_clicked,
-            }
-        ]
 
     def select_file_to_convert(self):
         self.file_path = None
@@ -126,23 +112,43 @@ class MainScreen(Screen):
         else:
             self.label_message.text = "All modules can be imported."
 
+    def log(self, *args):
+        self.label_log.text = ' '.join(list(str(i) for i in args)) + '\n' + self.label_log.text
+
+
+class MainScreen(Screen):
+    toolbar_menu: MDDropdownMenu = ObjectProperty()
+
+    convert_navigation_item: ConvertBottomNavigationPage = ObjectProperty()
+
+    def __init__(self, app: MainApp, **kw):
+        super().__init__(**kw)
+        self.app = app
+        self.file_path: Optional[str] = None
+        self.convert_thread: Optional[Thread] = None
+        self.toolbar_menu = MDDropdownMenu(width_mult=4)
+        self.toolbar_menu.items = [
+            {
+                "viewclass": "OneLineListItem",
+                "text": "Setting",
+                "on_release": self.on_setting_menu_clicked,
+            }
+        ]
+
     def on_toolbar_menu_clicked(self, button):
         self.toolbar_menu.caller = button
         self.toolbar_menu.open()
 
     def on_setting_menu_clicked(self):
         self.toolbar_menu.dismiss()
-        self.app.sm.switch_to(screen=SettingScreen(self.app,self))
-
-    def log(self, *args):
-        self.label_log.text = ' '.join(list(str(i) for i in args)) + '\n' + self.label_log.text
+        self.app.sm.switch_to(screen=SettingScreen(self.app, self))
 
 
 class SettingScreen(Screen):
     app = ObjectProperty()
     parent_screen = ObjectProperty()
 
-    def __init__(self, app:MainApp, parent_screen: Screen, **kw):
+    def __init__(self, app: MainApp, parent_screen: Screen, **kw):
         super().__init__(**kw)
         self.app = app
         self.parent_screen = parent_screen

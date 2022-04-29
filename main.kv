@@ -1,63 +1,27 @@
 <MainScreen>:
-    toolbar: toolbar
-    btn_select: btn_select
-    btn_convert: btn_convert
-    label_message: label_message
-    progress_bar: progress_bar
-    label_log: label_log
-
+    convert_bottom_navigation_page: convert_bottom_navigation_page
     MDBoxLayout:
         orientation: 'vertical'
         MDToolbar:
-            id: toolbar
             title: "Ebook Converter"
             right_action_items:  [["dots-vertical",lambda x: root.on_toolbar_menu_clicked(x)]]
-        ScrollView:
-            MDBoxLayout:
-                orientation: 'vertical'
-                padding: dp(48)
-                spacing: dp(15)
-                adaptive_height: True
-                MDRectangleFlatButton:
-                    id: btn_select
-                    text: "Select Ebook to Convert"
-                    pos_hint: {"center_x": 0.5}
-                    on_release:
-                        # btn_convert.disabled = False # Should be disabled after selecting a file.
-                        root.select_file_to_convert()
-                MDRectangleFlatButton:
-                    id: btn_convert
-                    text: "Convert"
-                    pos_hint: {"center_x": 0.5}
-                    disabled: True
-                    on_release:
-                        btn_select.disabled = True
-                        self.disabled = True
-                        root.start_convert()
-                MDRectangleFlatButton:
-                    text: "Test Load Modules"
-                    pos_hint: {"center_x": 0.5}
-                    on_release:
-                        root.test_load_modules()
-                Label:
-                    id: label_message
-                    text: 'Please select a file and start convert'
-                    color: "black"
-                    adaptive_height: True
-                MDProgressBar:
-                    id: progress_bar
-                    value: 0
-                    start: 0
-                    stop: 100
-                MDRectangleFlatButton:
-                    text: "Clear Logs"
-                    pos_hint: {"center_x": 0.5}
-                    on_release:
-                        label_log.text = ''
-                MDLabel:
-                    id: label_log
-                    adaptive_height: True
-                    text: "Logs."
+        MDBottomNavigation:
+            MDBottomNavigationItem:
+                name: 'input'
+                text: 'Input'
+                icon: 'arrow-down'
+            MDBottomNavigationItem:
+                name: 'main'
+                text: 'Conversion'
+                icon: 'home'
+                ConvertBottomNavigationPage:
+                    id:convert_bottom_navigation_page
+            MDBottomNavigationItem:
+                name: 'output'
+                text: 'Output'
+                icon: 'arrow-up'
+
+
 
 
 <SettingScreen>:
@@ -81,7 +45,54 @@
 
 
 
-<Widget>:
-    font_name: "NotoSansCJK-Regular.ttc"
-    #pos_hint: {"center_x": 0.5}
-
+<ConvertBottomNavigationPage>:
+    btn_select: btn_select
+    btn_convert: btn_convert
+    label_message: label_message
+    progress_bar: progress_bar
+    label_log: label_log
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: dp(48)
+        spacing: dp(15)
+        adaptive_height: True
+        MDRectangleFlatButton:
+            id: btn_select
+            text: "Select Ebook to Convert"
+            pos_hint: {"center_x": 0.5}
+            on_release:
+                # btn_convert.disabled = False # Should be disabled after selecting a file.
+                root.select_file_to_convert()
+        MDRectangleFlatButton:
+            id: btn_convert
+            text: "Convert"
+            pos_hint: {"center_x": 0.5}
+            disabled: True
+            on_release:
+                btn_select.disabled = True
+                self.disabled = True
+                root.start_convert()
+        MDRectangleFlatButton:
+            text: "Test Load Modules"
+            pos_hint: {"center_x": 0.5}
+            on_release:
+                root.test_load_modules()
+        Label:
+            id: label_message
+            text: 'Please select a file and start convert'
+            color: "black"
+            adaptive_height: True
+        MDProgressBar:
+            id: progress_bar
+            value: 0
+            start: 0
+            stop: 100
+        MDRectangleFlatButton:
+            text: "Clear Logs"
+            pos_hint: {"center_x": 0.5}
+            on_release:
+                label_log.text = ''
+        MDLabel:
+            id: label_log
+            adaptive_height: True
+            text: "Logs."
