@@ -24,7 +24,7 @@ Currently, following formats are supported:
   - Haodoo Reader
 
 - Rich Text Format (``rtf``)
-- Mobipocket (``mobi``)
+- Mobipocket (``mobi``)(**work**)
 - Kindle (``azw3``, ``azw4``, …)
 - FictionBook (``fb2``)
 - Hyper Text Markup Language (``html``)

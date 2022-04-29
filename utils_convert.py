@@ -64,6 +64,9 @@ class ConvertThread(Thread):
             import ebook_converter.ebooks.html.input
             import ebook_converter.ebooks.conversion.utils
             import ebook_converter.utils.smartypants
+            import ebook_converter.ebooks.mobi.reader
+            import ebook_converter.ebooks.mobi.reader.mobi6
+            import ebook_converter.ebooks.mobi.reader.mobi8
 
             ebook_converter_main(args=self.args, log=self.log, reporter=self.reporter)
         except Exception as e:
