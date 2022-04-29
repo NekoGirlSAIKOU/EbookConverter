@@ -12,7 +12,7 @@ def resource_filename(package_or_requirement: str, resource_name: str):
     if resource_name.endswith(".py"):
         # py will be compiled to pyc so I have to change it.
         resource_name += '.txt'
-    return os.path.join(os.environ["EBOOK_CONVERTER_ASSETS"], package_or_requirement, resource_name)
+    return os.path.join(os.environ["EBOOK_CONVERTER_ROOT"], package_or_requirement, resource_name)
 
 
 def hook():

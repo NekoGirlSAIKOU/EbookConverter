@@ -12,7 +12,6 @@ from kivymd.app import MDApp
 from kivymd.uix.button import MDRectangleFlatButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.progressbar import MDProgressBar
-from kivymd.uix.textfield import MDTextField
 from plyer.utils import platform
 
 from platform_utils import get_file_chooser
@@ -23,12 +22,6 @@ if getattr(sys, "frozen", False):  # bundle mode with PyInstaller
 else:
     sys.path.append(os.path.abspath(__file__).split("demos")[0])
     os.environ["EBOOK_CONVERTER_ROOT"] = str(Path(__file__).parent.absolute())
-
-os.environ["EBOOK_CONVERTER_ASSETS"] = os.path.join(
-    os.environ["EBOOK_CONVERTER_ROOT"], f"assets"
-)
-if not os.path.exists(os.environ["EBOOK_CONVERTER_ASSETS"]):
-    os.environ["EBOOK_CONVERTER_ASSETS"] = os.environ["EBOOK_CONVERTER_ROOT"]
 
 calibre_hooks.hook()
 
@@ -115,8 +108,12 @@ class MainScreen(Screen):
         else:
             self.label_message.text = "All modules can be imported."
 
+    def on_menu_clocked(self):
+        pass
+
     def log(self, *args):
         self.label_log.text = ' '.join(list(str(i) for i in args)) + '\n' + self.label_log.text
+
 
 
 class MainApp(MDApp):
