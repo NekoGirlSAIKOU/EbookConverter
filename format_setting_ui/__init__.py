@@ -64,6 +64,14 @@ class CheckboxLabel(MDBoxLayout):
     def active(self, value):
         self.chk_box.active = value
 
+    @property
+    def disabled(self):
+        return self.chk_box.disabled
+
+    @disabled.setter
+    def disabled(self,value):
+        self.chk_box.disabled = value
+
 
 class BaseSettingUi(MDBoxLayout):
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
