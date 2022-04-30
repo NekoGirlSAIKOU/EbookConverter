@@ -105,6 +105,7 @@ class ConvertBottomNavigationPage(ScrollView):
         super().__init__(**kwargs)
         self.file_path = None
         self.setting_map: Dict[str, Optional[Union[str, bool]]] = {}
+        self.convert_thread:Optional[Thread] = None
 
     @property
     def input_format(self):
@@ -282,7 +283,6 @@ class MainScreen(Screen):
     def __init__(self, app: MainApp, **kw):
         super().__init__(**kw)
         self.app = app
-        self.convert_thread: Optional[Thread] = None
         self.toolbar_menu = MDDropdownMenu(width_mult=4)
         self.toolbar_menu.items = [
             {
