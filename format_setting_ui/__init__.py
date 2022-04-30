@@ -65,7 +65,7 @@ class CheckboxLabel(MDBoxLayout):
         self.chk_box.active = value
 
 
-class BaseSettingUi(MDList):
+class BaseSettingUi(MDBoxLayout):
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(**kwargs)
         self.setting_map = setting_map
