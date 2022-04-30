@@ -105,6 +105,10 @@ class EPUBOutput(OutputFormatPlugin):
                  'but there will be no borders.'
         ),
 
+        OptionRecommendation(name='epub_no_rescale_images', recommended_value=False,
+                             help='If enabled images will not be rescaled.'
+                             ),
+
         OptionRecommendation(name='epub_flatten', recommended_value=False,
             help='This option is needed only if you intend to use the EPUB'
                  ' with FBReaderJ. It will flatten the file system inside the'
@@ -200,8 +204,9 @@ class EPUBOutput(OutputFormatPlugin):
         self.workaround_ade_quirks()
         self.workaround_webkit_quirks()
         self.upshift_markup()
-        from ebook_converter.ebooks.oeb.transforms.rescale import RescaleImages
-        RescaleImages(check_colorspaces=True)(oeb, opts)
+        if not self.opts.epub_no_rescale_images:
+            from ebook_converter.ebooks.oeb.transforms.rescale import RescaleImages
+            RescaleImages(check_colorspaces=True)(oeb, opts)
 
         from ebook_converter.ebooks.oeb.transforms.split import Split
         split = Split(not self.opts.dont_split_on_page_breaks,
