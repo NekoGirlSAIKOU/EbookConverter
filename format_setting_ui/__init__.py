@@ -3,7 +3,9 @@ from typing import Dict, Optional, Union
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.label import MDLabel
 from kivymd.uix.list import MDList
+from kivymd.uix.selectioncontrol import MDCheckbox
 from kivymd.uix.textfield import MDTextField
 
 Builder.load_file('format_setting_ui/BaseSettingUi.kv')
@@ -29,6 +31,36 @@ def optional_str2str(s: Optional[str]):
         return 'null'
     else:
         return s
+
+
+class CheckboxLabel(MDBoxLayout):
+    lbl: MDLabel = ObjectProperty()
+    lbl_helper_text: MDLabel = ObjectProperty
+    chk_box: MDCheckbox = ObjectProperty()
+
+    @property
+    def text(self):
+        return self.lbl.text
+
+    @text.setter
+    def text(self, value):
+        self.lbl.text = value
+
+    @property
+    def helper_text(self):
+        return self.lbl_helper_text.text
+
+    @helper_text.setter
+    def helper_text(self, value):
+        self.lbl_helper_text.text = value
+
+    @property
+    def active(self):
+        return self.chk_box.active
+
+    @active.setter
+    def active(self, value):
+        self.chk_box.active = value
 
 
 class BaseSettingUi(MDList):
@@ -70,35 +102,50 @@ class BaseOutputSettingUi(BaseSettingUi):
 
     def update_setting(self):
         """update setting to save UI changes"""
-        print('update_setting: save tf_book_title: ', self.tf_book_title.text)
         self.setting_map['--title'] = str2optional_str(self.tf_book_title.text)
 
 
 class MobiOutputSettingUi(BaseOutputSettingUi):
     tf_file_type: MDTextField = ObjectProperty()
     tf_personal_doc: MDTextField = ObjectProperty()
+    chk_lbl_dont_compress: CheckboxLabel = ObjectProperty()
+    chk_lbl_no_inline_toc: CheckboxLabel = ObjectProperty()
+    chk_lbl_share_not_sync: CheckboxLabel = ObjectProperty()
 
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(setting_map, **kwargs)
         self.supported_settings.extend([
             '--mobi-file-type',
-            '--personal-doc'
+            '--personal-doc',
+            '--dont-compress',
+            '--no-inline-toc',
+            '--share-not-sync',
         ])
 
     def fill_settings(self):
         super(MobiOutputSettingUi, self).fill_settings()
         self.setting_map['--mobi-file-type'] = self.setting_map.get('--mobi-file-type', 'old')
         self.setting_map['--personal-doc'] = self.setting_map.get('--personal-doc', '[PDOC]')
+        self.setting_map['--dont-compress'] = self.setting_map.get('--dont-compress', False)
+        self.setting_map['--no-inline-toc'] = self.setting_map.get('--no-inline-toc', False)
+        self.setting_map['--share-not-sync'] = self.setting_map.get('--share-not-sync', False)
 
     def update_ui(self):
         super(MobiOutputSettingUi, self).update_ui()
         self.tf_file_type.text = optional_str2str(self.setting_map['--mobi-file-type'])
         self.tf_personal_doc.text = optional_str2str(self.setting_map['--personal-doc'])
+        self.chk_lbl_dont_compress.active = self.setting_map['--dont-compress']
+        self.chk_lbl_no_inline_toc.active = self.setting_map['--no-inline-toc']
+        self.chk_lbl_share_not_sync.active = self.setting_map['--share-not-sync']
+
 
     def update_setting(self):
         super(MobiOutputSettingUi, self).update_setting()
         self.setting_map['--mobi-file-type'] = str2optional_str(self.tf_file_type.text)
         self.setting_map['--personal-doc'] = str2optional_str(self.tf_personal_doc.text)
+        self.setting_map['--dont-compress'] = self.chk_lbl_dont_compress.active
+        self.setting_map['--no-inline-toc'] = self.chk_lbl_no_inline_toc.active
+        self.setting_map['--share-not-sync'] = self.chk_lbl_share_not_sync.active
 
 
 class BaseInputSettingUi(BaseSettingUi):

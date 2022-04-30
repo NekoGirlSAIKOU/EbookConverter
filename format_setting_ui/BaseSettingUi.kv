@@ -3,3 +3,27 @@
     # adaptive_height: True
     # padding: dp(16)
     # space: dp(10)
+
+<CheckboxLabel>:
+    lbl: lbl
+    chk_box: chk_box
+    lbl_helper_text: lbl_helper_text
+    adaptive_height: True
+    MDBoxLayout:
+        orientation: 'vertical'
+        adaptive_height: True
+        adaptive_width: True
+        width: root.width-chk_box.width
+        MDLabel:
+            id:lbl
+            adaptive_height: True
+        MDLabel:
+            id:lbl_helper_text
+            adaptive_height: True
+            font_size: lbl.font_size / 3 * 2
+            color: "grey"
+            display: False
+    MDCheckbox:
+        id: chk_box
+        active: root.active
+

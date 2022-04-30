@@ -1,6 +1,9 @@
 <MobiOutputSettingUi>
     tf_file_type: tf_file_type
     tf_personal_doc: tf_personal_doc
+    chk_lbl_dont_compress: chk_lbl_dont_compress
+    chk_lbl_no_inline_toc: chk_lbl_no_inline_toc
+    chk_lbl_share_not_sync: chk_lbl_share_not_sync
     MDTextField:
         id: tf_file_type
         hint_text: "Mobi file type(Unsupported for now)"
@@ -12,3 +15,16 @@
         hint_text: "--personal-doc"
         helper_text: "Tag for MOBI files to be marked as personal documents."
         helper_text_mode: "on_focus"
+    CheckboxLabel:
+        id: chk_lbl_dont_compress
+        text: "--dont-compress"
+        helper_text: "Disable compression of the file contents."
+    CheckboxLabel:
+        id: chk_lbl_no_inline_toc
+        text: "--no-inline-toc"
+        helper_text: "Don't add Table of Contents to the book."
+    CheckboxLabel:
+        id: chk_lbl_share_not_sync
+        text: "--share-not-sync"
+        helper_text: "Enable sharing of book content via Facebook etc."
+
