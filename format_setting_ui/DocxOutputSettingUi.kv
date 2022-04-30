@@ -1,0 +1,53 @@
+<DocxOutputSettingUi>:
+    tf_docx_custom_page_size: tf_docx_custom_page_size
+    tf_docx_page_size: tf_docx_page_size
+    tf_docx_page_margin_top: tf_docx_page_margin_top
+    tf_docx_page_margin_bottom: tf_docx_page_margin_bottom
+    tf_docx_page_margin_left: tf_docx_page_margin_left
+    tf_docx_page_margin_right: tf_docx_page_margin_right
+    chk_lbl_docx_no_toc: chk_lbl_docx_no_toc
+    chk_lbl_preserve_cover_aspect_ratio: chk_lbl_preserve_cover_aspect_ratio
+    chk_lbl_docx_no_cover: chk_lbl_docx_no_cover
+    MDTextField:
+        id: tf_docx_custom_page_size
+        hint_text: "--docx-custom-page-size:"
+        helper_text: "Custom size of the document. Use the form widthxheight EG. `123x321` to specify the width and height (in pts). This overrides any specified page-size."
+        helper_text_mode: "on_focus"
+    MDTextField:
+        id: tf_docx_page_size
+        hint_text: "--docx-page-size:"
+        helper_text: "The size of the page. Default is letter. You can choose a0 a1 a2 ... b6 legal and letter."
+        helper_text_mode: "on_focus"
+    MDTextField:
+        id: tf_docx_page_margin_top
+        hint_text: "--docx-page-margin-top:"
+        helper_text: "The size of the top page margin, in pts. Default is 72pt. Overrides the common top page margin setting."
+        helper_text_mode: "on_focus"
+    MDTextField:
+        id: tf_docx_page_margin_bottom
+        hint_text: "--docx-page-margin-bottom:"
+        helper_text: "The size of the bottom page margin, in pts. Default is 72pt. Overrides the common bottom page margin setting."
+        helper_text_mode: "on_focus"
+    MDTextField:
+        id: tf_docx_page_margin_left
+        hint_text: "--docx-page-margin-left:"
+        helper_text: "The size of the left page margin, in pts. Default is 72pt. Overrides the common left page margin setting."
+        helper_text_mode: "on_focus"
+    MDTextField:
+        id: tf_docx_page_margin_right
+        hint_text: "--docx-page-margin-right:"
+        helper_text: "The size of the right page margin, in pts. Default is 72pt. Overrides the common right page margin setting."
+        helper_text_mode: "on_focus"
+    CheckboxLabel:
+        id: chk_lbl_docx_no_toc
+        text: "--docx-no-toc"
+        helper_text: "Do not insert the table of contents as a page at the start of the document."
+    CheckboxLabel:
+        id: chk_lbl_preserve_cover_aspect_ratio
+        text: "--preserve-cover-aspect-ratio"
+        helper_text: "Preserve the aspect ratio of the cover image instead of stretching it out to cover the entire page."
+    CheckboxLabel:
+        id: chk_lbl_docx_no_cover
+        text: "--docx-no-cover"
+        helper_text: "Do not insert the book cover as an image at the start of the document."
+

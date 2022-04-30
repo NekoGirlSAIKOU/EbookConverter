@@ -18,6 +18,7 @@ Currently, following formats are supported:
 - Several PalmOS (``pdb``) readers support:
 
   - Plucker
+    
   - Adobe Reader for PalmOS
   - eReader various formats
   - Weasel Reader
@@ -40,9 +41,9 @@ Currently, following formats are supported:
 - Broadband eBooks (shortened as BBeB) (``lrf``)
 - EPUB v2 (``epub``)(**work**)
 - Mobipocket (``mobi``)(**work**)
-- Microsoft Word (``docx``)
+- Microsoft Word (``docx``)(**work**)
 - zipped HTML file with additional assets, like images (``htmlz``)
-- Text (``txt``)
+- Text (``txt``)(**work**)
 
 # Build
 Install required packages:

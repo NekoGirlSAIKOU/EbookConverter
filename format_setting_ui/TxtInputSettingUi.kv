@@ -1,0 +1,36 @@
+<TxtInputSettingUi>:
+    tf_formatting_type: tf_formatting_type
+    tf_paragraph_type: tf_paragraph_type
+    tf_input_encoding: tf_input_encoding
+    tf_markdown_extensions: tf_markdown_extensions
+    chk_lbl_txt_in_remove_indents: chk_lbl_txt_in_remove_indents
+    chk_lbl_preserve_spaces: chk_lbl_preserve_spaces
+    MDTextField:
+        id: tf_formatting_type
+        hint_text: "--formatting-type"
+        helper_text: "Formatting used within the document: ['auto', 'plain', 'heuristic', 'textile', 'markdown']"
+        helper_text_mode: "on_focus"
+    MDTextField:
+        id: tf_paragraph_type
+        hint_text: "--paragraph-type"
+        helper_text: "Paragraph structure to assume: ['auto', 'block', 'single', 'print', 'unformatted', 'off']"
+        helper_text_mode: "on_focus"
+    MDTextField:
+        id: tf_input_encoding
+        hint_text: "--input-encoding"
+        helper_text: "Specify the character encoding of the input document."
+        helper_text_mode: "on_focus"
+    MDTextField:
+        id: tf_markdown_extensions
+        hint_text: "--markdown-extensions"
+        helper_text: "See calibre document. This may not work well."
+        helper_text_mode: "on_focus"
+    CheckboxLabel:
+        id: chk_lbl_txt_in_remove_indents
+        text: "--txt-in-remove-indents"
+        helper_text: " Normally extra space at the beginning of lines is retained. With this option they will be removed."
+    CheckboxLabel:
+        id: chk_lbl_preserve_spaces
+        text: "--preserve-spaces"
+        helper_text: "Normally extra spaces are condensed into a single space. With this option all spaces will be displayed."
+

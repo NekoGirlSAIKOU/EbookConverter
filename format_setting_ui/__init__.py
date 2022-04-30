@@ -13,10 +13,14 @@ Builder.load_file('format_setting_ui/BaseSettingUi.kv')
 Builder.load_file('format_setting_ui/BaseOutputSettingUi.kv')
 Builder.load_file('format_setting_ui/EpubOutputSettingUi.kv')
 Builder.load_file('format_setting_ui/MobiOutputSettingUi.kv')
+Builder.load_file('format_setting_ui/DocxOutputSettingUi.kv')
+Builder.load_file('format_setting_ui/TxtOutputSettingUi.kv')
 
 Builder.load_file('format_setting_ui/BaseInputSettingUi.kv')
 Builder.load_file('format_setting_ui/EpubInputSettingUi.kv')
 Builder.load_file('format_setting_ui/MobiInputSettingUi.kv')
+Builder.load_file('format_setting_ui/DocxInputSettingUi.kv')
+Builder.load_file('format_setting_ui/TxtInputSettingUi.kv')
 
 
 def str2optional_str(s: str):
@@ -69,7 +73,7 @@ class CheckboxLabel(MDBoxLayout):
         return self.chk_box.disabled
 
     @disabled.setter
-    def disabled(self,value):
+    def disabled(self, value):
         self.chk_box.disabled = value
 
 
@@ -176,6 +180,55 @@ class EpubOutputSettingUi(BaseOutputSettingUi):
         self.bind_settings('--preserve-cover-aspect-ratio', True, self.chk_lbl_preserve_cover_aspect_ratio)
 
 
+class DocxOutputSettingUi(BaseOutputSettingUi):
+    tf_docx_custom_page_size: MDTextField = ObjectProperty()
+    tf_docx_page_size: MDTextField = ObjectProperty()
+    tf_docx_page_margin_top: MDTextField = ObjectProperty()
+    tf_docx_page_margin_bottom: MDTextField = ObjectProperty()
+    tf_docx_page_margin_left: MDTextField = ObjectProperty()
+    tf_docx_page_margin_right: MDTextField = ObjectProperty()
+    chk_lbl_docx_no_toc: CheckboxLabel = ObjectProperty()
+    chk_lbl_preserve_cover_aspect_ratio: CheckboxLabel = ObjectProperty()
+    chk_lbl_docx_no_cover: CheckboxLabel = ObjectProperty()
+
+    def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
+        super().__init__(setting_map, **kwargs)
+        self.bind_settings('--docx-custom-page-size', None, self.tf_docx_custom_page_size)
+        self.bind_settings('--docx-page-size', None, self.tf_docx_page_size)
+        self.bind_settings('--docx-page-margin-top', None, self.tf_docx_page_margin_top)
+        self.bind_settings('--docx-page-margin-bottom', None, self.tf_docx_page_margin_bottom)
+        self.bind_settings('--docx-page-margin-left', None, self.tf_docx_page_margin_left)
+        self.bind_settings('--docx-page-margin-right', None, self.tf_docx_page_margin_right)
+        self.bind_settings('--docx-no-toc', False, self.chk_lbl_docx_no_toc)
+        self.bind_settings('--preserve-cover-aspect-ratio', True, self.chk_lbl_preserve_cover_aspect_ratio)
+        self.bind_settings('--docx-no-cover', False, self.chk_lbl_docx_no_cover)
+
+
+class TxtOutputSettingUi(BaseOutputSettingUi):
+    tf_newline: MDTextField = ObjectProperty()
+    tf_max_line_length: MDTextField = ObjectProperty()
+    tf_txt_output_formatting: MDTextField = ObjectProperty()
+    tf_txt_output_encoding: MDTextField = ObjectProperty()
+
+    chk_lbl_force_max_line_length: CheckboxLabel = ObjectProperty()
+    chk_lbl_keep_image_reference: CheckboxLabel = ObjectProperty()
+    chk_lbl_keep_color: CheckboxLabel = ObjectProperty()
+    chk_lbl_keep_links: CheckboxLabel = ObjectProperty()
+    chk_lbl_inline_toc: CheckboxLabel = ObjectProperty()
+
+    def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
+        super().__init__(setting_map, **kwargs)
+        self.bind_settings('--newline', 'system', self.tf_newline)
+        self.bind_settings('--max-line-length', None, self.tf_max_line_length)
+        self.bind_settings('--txt-output-formatting', "plain", self.tf_txt_output_formatting)
+        self.bind_settings('--txt-output-encoding', 'utf-8', self.tf_txt_output_encoding)
+        self.bind_settings('--force-max-line-length', False, self.chk_lbl_force_max_line_length)
+        self.bind_settings('--keep-image-references', False, self.chk_lbl_keep_image_reference)
+        self.bind_settings('--keep-color', False, self.chk_lbl_keep_color)
+        self.bind_settings('--keep-links', False, self.chk_lbl_keep_links)
+        self.bind_settings('--inline-toc', False, self.chk_lbl_inline_toc)
+
+
 class BaseInputSettingUi(BaseSettingUi):
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(setting_map, **kwargs)
@@ -195,3 +248,33 @@ class MobiInputSettingUi(BaseInputSettingUi):
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(setting_map, **kwargs)
         self.bind_settings('--input-encoding', None, self.tf_input_encoding)
+
+
+class DocxInputSettingUi(BaseInputSettingUi):
+    chk_lbl_docx_no_pagebreaks_between_notes: CheckboxLabel = ObjectProperty()
+    chk_lbl_docx_inline_subsup: CheckboxLabel = ObjectProperty()
+    tf_input_encoding: MDTextField = ObjectProperty()
+
+    def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
+        super().__init__(setting_map, **kwargs)
+        self.bind_settings('--docx-no-pagebreaks-between-notes', False, self.chk_lbl_docx_no_pagebreaks_between_notes)
+        self.bind_settings('--docx-inline-subsup', False, self.chk_lbl_docx_inline_subsup)
+        self.bind_settings('--input-encoding', None, self.tf_input_encoding)
+
+
+class TxtInputSettingUi(BaseInputSettingUi):
+    tf_formatting_type: MDTextField = ObjectProperty()
+    tf_paragraph_type: MDTextField = ObjectProperty()
+    tf_input_encoding: MDTextField = ObjectProperty()
+    tf_markdown_extensions: MDTextField = ObjectProperty()
+    chk_lbl_txt_in_remove_indents: CheckboxLabel = ObjectProperty()
+    chk_lbl_preserve_spaces: CheckboxLabel = ObjectProperty()
+
+    def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
+        super().__init__(setting_map, **kwargs)
+        self.bind_settings('--formatting-type', 'plain', self.tf_formatting_type)
+        self.bind_settings('--paragraph-type', 'auto', self.tf_paragraph_type)
+        self.bind_settings('--input-encoding', None, self.tf_input_encoding)
+        self.bind_settings('--markdown-extensions', None, self.tf_markdown_extensions)
+        self.bind_settings('--txt-in-remove-indents', False, self.chk_lbl_txt_in_remove_indents)
+        self.bind_settings('--preserve-spaces', False, self.chk_lbl_preserve_spaces)

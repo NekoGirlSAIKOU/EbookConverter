@@ -1,0 +1,56 @@
+<TxtOutputSettingUi>:
+    tf_newline: tf_newline
+    tf_max_line_length: tf_max_line_length
+    tf_txt_output_formatting: tf_txt_output_formatting
+    tf_txt_output_encoding: tf_txt_output_encoding
+
+    chk_lbl_force_max_line_length: chk_lbl_force_max_line_length
+    chk_lbl_keep_image_reference: chk_lbl_keep_image_reference
+    chk_lbl_keep_color: chk_lbl_keep_color
+    chk_lbl_keep_links: chk_lbl_keep_links
+    chk_lbl_inline_toc: chk_lbl_inline_toc
+    MDTextField:
+        id: tf_newline
+        hint_text: "--newline"
+        helper_text: "Type of newline to use. Options are ['old_mac', 'system', 'unix', 'windows']."
+        helper_text_mode: "on_focus"
+    MDTextField:
+        id: tf_max_line_length
+        hint_text: "--max-line-length"
+        helper_text: "The maximum number of characters per line. This splits on the first space before the specified value."
+        helper_text_mode: "on_focus"
+    MDTextField:
+        id: tf_txt_output_formatting
+        hint_text: "--txt-output-formatting"
+        helper_text: "plain, markdown or textile"
+        helper_text_mode: "on_focus"
+    MDTextField:
+        id: tf_txt_output_encoding
+        hint_text: "--txt-output-encoding"
+        helper_text: "Specify the character encoding of the output document."
+        helper_text_mode: "on_focus"
+
+    CheckboxLabel:
+        id: chk_lbl_force_max_line_length
+        text: "--force-max-line-length"
+        helper_text: "Force splitting on the max-line-length value when no space is present."
+    CheckboxLabel:
+        id: chk_lbl_keep_image_reference
+        text: "--keep-image-references"
+        helper_text: "Do not remove image references within the document. Links are always removed with plain text output."
+    CheckboxLabel:
+        id: chk_lbl_keep_color
+        text: "--keep-color"
+        helper_text: "Do not remove font color from output. Textile is the only formatting that supports setting font color. "
+    CheckboxLabel:
+        id: chk_lbl_keep_links
+        text: "--keep-links"
+        helper_text: "Do not remove links within the document. Links are always removed with plain text output."
+    CheckboxLabel:
+        id: chk_lbl_inline_toc
+        text: "--inline-toc"
+        helper_text: "Add Table of Contents to beginning of the book."
+
+
+
+
