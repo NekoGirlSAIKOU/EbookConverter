@@ -21,6 +21,7 @@ Builder.load_file('format_setting_ui/EpubInputSettingUi.kv')
 Builder.load_file('format_setting_ui/MobiInputSettingUi.kv')
 Builder.load_file('format_setting_ui/DocxInputSettingUi.kv')
 Builder.load_file('format_setting_ui/TxtInputSettingUi.kv')
+Builder.load_file('format_setting_ui/HtmlInputSettingUi.kv')
 
 
 def str2optional_str(s: str):
@@ -278,3 +279,17 @@ class TxtInputSettingUi(BaseInputSettingUi):
         self.bind_settings('--markdown-extensions', None, self.tf_markdown_extensions)
         self.bind_settings('--txt-in-remove-indents', False, self.chk_lbl_txt_in_remove_indents)
         self.bind_settings('--preserve-spaces', False, self.chk_lbl_preserve_spaces)
+
+
+class HtmlInputSettingUi(BaseInputSettingUi):
+    tf_max_levels: MDTextField = ObjectProperty()
+    tf_input_encoding: MDTextField = ObjectProperty()
+    chk_lbl_breadth_first: CheckboxLabel = ObjectProperty()
+    chk_lbl_dont_package: CheckboxLabel = ObjectProperty()
+
+    def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
+        super().__init__(setting_map, **kwargs)
+        self.bind_settings('--max-levels', None, self.tf_max_levels)
+        self.bind_settings('--input-encoding', None, self.tf_input_encoding)
+        self.bind_settings('--breadth-first', False, self.chk_lbl_breadth_first)
+        self.bind_settings('--dont-package', False, self.chk_lbl_dont_package)

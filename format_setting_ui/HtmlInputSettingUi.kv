@@ -1,0 +1,24 @@
+<HtmlInputSettingUi>:
+    tf_max_levels: tf_max_levels
+    tf_input_encoding: tf_input_encoding
+    chk_lbl_breadth_first: chk_lbl_breadth_first
+    chk_lbl_dont_package: chk_lbl_dont_package
+    MDTextField:
+        id: tf_max_levels
+        hint_text: "--max-levels"
+        helper_text: "Maximum levels of recursion when following links in HTML files. Must be non-negative. 0 implies that no links in the root HTML file are followed. Default is 5."
+        helper_text_mode: "on_focus"
+    MDTextField:
+        id: tf_input_encoding
+        hint_text: "--input-encoding"
+        helper_text: "Specify the character encoding of the input document."
+        helper_text_mode: "on_focus"
+    CheckboxLabel:
+        id: chk_lbl_breadth_first
+        text: "--breadth-first"
+        helper_text: "Traverse links in HTML files breadth first. Normally, they are traversed depth first."
+    CheckboxLabel:
+        id: chk_lbl_dont_package
+        text: "--dont-package"
+        helper_text: "Don't ues it unless you know what you are doing."
+
