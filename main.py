@@ -72,7 +72,6 @@ class InputBottomNavigationPage(MDBoxLayout):
         else:
             self.current_setting_ui = BaseInputSettingUi(self.setting_map)
 
-        self.current_setting_ui.fill_settings()
         self.scroll_view.add_widget(self.current_setting_ui)
         self.current_setting_ui.update_ui()
 
@@ -253,7 +252,6 @@ class OutputBottomNavigationPage(MDBoxLayout):
         else:
             self.current_setting_ui = BaseOutputSettingUi(self.setting_map)
 
-        self.current_setting_ui.fill_settings()
         self.scroll_view.add_widget(self.current_setting_ui)
         self.current_setting_ui.update_ui()
 

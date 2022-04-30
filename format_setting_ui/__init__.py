@@ -69,18 +69,33 @@ class BaseSettingUi(MDList):
         self.setting_map = setting_map
         self.supported_settings = [
         ]
-
-    def fill_settings(self):
-        """FIll settings map using default settings"""
-        pass
+        self.setting_binds: Dict[str, Union[CheckboxLabel, MDTextField]] = {}
 
     def update_ui(self):
         """Update UI to show updated setting"""
-        pass
+        for key, widget in self.setting_binds.items():
+            if isinstance(widget, MDTextField):
+                widget.text = optional_str2str(self.setting_map[key])
+            elif isinstance(widget, CheckboxLabel):
+                widget.active = self.setting_map[key]
+            else:
+                raise RuntimeError(f"Unsupported bounded widget: {type(widget).__name__}")
 
     def update_setting(self):
         """update setting to save UI changes"""
-        pass
+        for key, widget in self.setting_binds.items():
+            if isinstance(widget, MDTextField):
+                self.setting_map[key] = str2optional_str(widget.text)
+            elif isinstance(widget, CheckboxLabel):
+                self.setting_map[key] = widget.active
+            else:
+                raise RuntimeError(f"Unsupported bounded widget: {type(widget).__name__}")
+
+    def bind_settings(self, calibre_arg: str, default_value: Optional[Union[str, bool]],
+                      widget: Union[CheckboxLabel, MDTextField]):
+        self.supported_settings.append(calibre_arg)
+        self.setting_map[calibre_arg] = self.setting_map.get(calibre_arg, default_value)
+        self.setting_binds[calibre_arg] = widget
 
 
 class BaseOutputSettingUi(BaseSettingUi):
@@ -88,21 +103,7 @@ class BaseOutputSettingUi(BaseSettingUi):
 
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(setting_map, **kwargs)
-        self.supported_settings.extend([
-            '--title'
-        ])
-
-    def fill_settings(self):
-        """FIll settings map using default settings"""
-        self.setting_map['--title'] = self.setting_map.get('--title', None)
-
-    def update_ui(self):
-        """Update UI to show updated setting"""
-        self.tf_book_title.text = optional_str2str(self.setting_map['--title'])
-
-    def update_setting(self):
-        """update setting to save UI changes"""
-        self.setting_map['--title'] = str2optional_str(self.tf_book_title.text)
+        self.bind_settings('--title', None, self.tf_book_title)
 
 
 class MobiOutputSettingUi(BaseOutputSettingUi):
@@ -114,60 +115,16 @@ class MobiOutputSettingUi(BaseOutputSettingUi):
 
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(setting_map, **kwargs)
-        self.supported_settings.extend([
-            '--mobi-file-type',
-            '--personal-doc',
-            '--dont-compress',
-            '--no-inline-toc',
-            '--share-not-sync',
-        ])
-
-    def fill_settings(self):
-        super(MobiOutputSettingUi, self).fill_settings()
-        self.setting_map['--mobi-file-type'] = self.setting_map.get('--mobi-file-type', 'old')
-        self.setting_map['--personal-doc'] = self.setting_map.get('--personal-doc', '[PDOC]')
-        self.setting_map['--dont-compress'] = self.setting_map.get('--dont-compress', False)
-        self.setting_map['--no-inline-toc'] = self.setting_map.get('--no-inline-toc', False)
-        self.setting_map['--share-not-sync'] = self.setting_map.get('--share-not-sync', False)
-
-    def update_ui(self):
-        super(MobiOutputSettingUi, self).update_ui()
-        self.tf_file_type.text = optional_str2str(self.setting_map['--mobi-file-type'])
-        self.tf_personal_doc.text = optional_str2str(self.setting_map['--personal-doc'])
-        self.chk_lbl_dont_compress.active = self.setting_map['--dont-compress']
-        self.chk_lbl_no_inline_toc.active = self.setting_map['--no-inline-toc']
-        self.chk_lbl_share_not_sync.active = self.setting_map['--share-not-sync']
-
-
-    def update_setting(self):
-        super(MobiOutputSettingUi, self).update_setting()
-        self.setting_map['--mobi-file-type'] = str2optional_str(self.tf_file_type.text)
-        self.setting_map['--personal-doc'] = str2optional_str(self.tf_personal_doc.text)
-        self.setting_map['--dont-compress'] = self.chk_lbl_dont_compress.active
-        self.setting_map['--no-inline-toc'] = self.chk_lbl_no_inline_toc.active
-        self.setting_map['--share-not-sync'] = self.chk_lbl_share_not_sync.active
+        self.bind_settings('--mobi-file-type', 'old', self.tf_file_type)
+        self.bind_settings('--personal-doc', '[PDOC]', self.tf_personal_doc)
+        self.bind_settings('--dont-compress', False, self.chk_lbl_dont_compress)
+        self.bind_settings('--no-inline-toc', False, self.chk_lbl_no_inline_toc)
+        self.bind_settings('--share-not-sync', False, self.chk_lbl_share_not_sync)
 
 
 class BaseInputSettingUi(BaseSettingUi):
-    tf_book_title: MDTextField = ObjectProperty()
-
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(setting_map, **kwargs)
-        self.supported_settings.extend([
-
-        ])
-
-    def fill_settings(self):
-        """FIll settings map using default settings"""
-        pass
-
-    def update_ui(self):
-        """Update UI to show updated setting"""
-        pass
-
-    def update_setting(self):
-        """update setting to save UI changes"""
-        pass
 
 
 class EpubInputSettingUi(BaseInputSettingUi):
@@ -175,18 +132,4 @@ class EpubInputSettingUi(BaseInputSettingUi):
 
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(setting_map, **kwargs)
-        self.supported_settings.extend([
-            '--input-encoding'
-        ])
-
-    def fill_settings(self):
-        """FIll settings map using default settings"""
-        self.setting_map['--input-encoding'] = self.setting_map.get('--input-encoding', None)
-
-    def update_ui(self):
-        """Update UI to show updated setting"""
-        self.tf_input_encoding.text = optional_str2str(self.setting_map['--input-encoding'])
-
-    def update_setting(self):
-        """update setting to save UI changes"""
-        self.setting_map['--input-encoding'] = str2optional_str(self.tf_input_encoding.text)
+        self.bind_settings('--input-encoding', None, self.tf_input_encoding)
