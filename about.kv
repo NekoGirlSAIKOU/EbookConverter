@@ -1,0 +1,124 @@
+<AboutScreen>:
+    toolbar: toolbar
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDToolbar:
+            id: toolbar
+            title: "Ebook Converter"
+            left_action_items: [["arrow-left", lambda x: root.on_leave_button_clicked()]]
+        ScrollView:
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: dp(24)
+                spacing: dp(15)
+                adaptive_height: True
+                MDLabel:
+                    text: "Ebook Converter"
+                    adaptive_height: True
+                MDLabel:
+                    text: "An ebook converter based on calibre."
+                    adaptive_height: True
+                MDLabel:
+                    text: "Developer: NekoGirlSAIKOU"
+                    adaptive_height: True
+                MDLabel:
+                    text: "Licenses:"
+                    adaptive_height: True
+                MDList:
+                    ThreeLineListItem:
+                        text: 'Ebook Converter'
+                        secondary_text: 'https://github.com/NekoGirlSAIKOU/EbookConverter'
+                        tertiary_text: 'GPL-3.0 License'
+                        on_release:
+                            root.open_url('https://github.com/NekoGirlSAIKOU/EbookConverter/blob/master/LICENSE')
+                    TwoLineListItem:
+                        text: 'kivy'
+                        secondary_text: 'MIT License'
+                        on_release:
+                            root.open_url('https://github.com/kivy/kivy/blob/master/LICENSE')
+                    TwoLineListItem:
+                        text: 'kivymd'
+                        secondary_text: 'MIT License'
+                        on_release:
+                            root.open_url('https://github.com/kivymd/KivyMD/blob/master/LICENSE')
+                    TwoLineListItem:
+                        text: 'plyer'
+                        secondary_text: 'MIT License'
+                        on_release:
+                            root.open_url('https://github.com/kivy/plyer/blob/master/LICENSE')
+                    TwoLineListItem:
+                        text: 'calibre'
+                        secondary_text: 'GPL-3.0 License'
+                        on_release:
+                            root.open_url('https://github.com/kovidgoyal/calibre/blob/master/LICENSE')
+                    TwoLineListItem:
+                        text: 'ebook-converter'
+                        secondary_text: 'GPL-3.0 License'
+                        on_release:
+                            root.open_url('https://github.com/gryf/ebook-converter/blob/master/LICENSE')
+                    TwoLineListItem:
+                        text: 'buildozer'
+                        secondary_text: 'MIT License'
+                        on_release:
+                            root.open_url('https://github.com/kivy/buildozer/blob/master/LICENSE')
+                    TwoLineListItem:
+                        text: 'beautifulsoup4'
+                        secondary_text: 'MIT License'
+                        on_release:
+                            root.open_url('https://pypi.org/project/beautifulsoup4/')
+                    TwoLineListItem:
+                        text: 'css-parser'
+                        secondary_text: 'LGPL 3.0 or later'
+                        on_release:
+                            root.open_url('https://pypi.org/project/css-parser/')
+                    TwoLineListItem:
+                        text: 'filelock'
+                        secondary_text: 'Public Domain (Unlicense)'
+                        on_release:
+                            root.open_url('https://pypi.org/project/filelock/')
+                    TwoLineListItem:
+                        text: 'html2text'
+                        secondary_text: 'GNU GPL 3'
+                        on_release:
+                            root.open_url('https://pypi.org/project/html2text/')
+                    TwoLineListItem:
+                        text: 'lxml'
+                        secondary_text: 'BSD'
+                        on_release:
+                            root.open_url('https://pypi.org/project/lxml/')
+                    TwoLineListItem:
+                        text: 'msgpack'
+                        secondary_text: 'Apache 2.0'
+                        on_release:
+                            root.open_url('https://pypi.org/project/msgpack/')
+                    TwoLineListItem:
+                        text: 'odfpy'
+                        secondary_text: 'Apache Software License, GPL, LGPL'
+                        on_release:
+                            root.open_url('https://pypi.org/project/odfpy/')
+                    TwoLineListItem:
+                        text: 'pillow'
+                        secondary_text: 'HPND'
+                        on_release:
+                            root.open_url('https://pypi.org/project/pillow/')
+                    TwoLineListItem:
+                        text: 'python-dateutil'
+                        secondary_text: 'Apache Software License, BSD License (Dual License)'
+                        on_release:
+                            root.open_url('https://pypi.org/project/python-dateutil/')
+                    TwoLineListItem:
+                        text: 'setuptools'
+                        secondary_text: 'MIT License'
+                        on_release:
+                            root.open_url('https://pypi.org/project/setuptools/')
+                    TwoLineListItem:
+                        text: 'tinycss'
+                        secondary_text: 'BSD License'
+                        on_release:
+                            root.open_url('https://pypi.org/project/tinycss/')
+                    TwoLineListItem:
+                        text: 'chardet'
+                        secondary_text: 'LGPL'
+                        on_release:
+                            root.open_url('https://pypi.org/project/chardet/')

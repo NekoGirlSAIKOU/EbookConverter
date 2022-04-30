@@ -6,6 +6,7 @@ from threading import Thread
 from typing import Optional, Dict, Union
 
 from kivy.clock import mainthread
+from kivy.lang import Builder
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
@@ -20,6 +21,7 @@ from kivymd.uix.progressbar import MDProgressBar
 from kivymd.uix.toolbar import MDToolbar, MDActionTopAppBarButton
 from plyer.utils import platform
 
+from about import AboutScreen
 from format_setting_ui import MobiOutputSettingUi, BaseSettingUi, BaseOutputSettingUi, BaseInputSettingUi, \
     EpubInputSettingUi, MobiInputSettingUi, EpubOutputSettingUi
 from utils_platform import get_file_chooser
@@ -285,8 +287,8 @@ class MainScreen(Screen):
         self.toolbar_menu.items = [
             {
                 "viewclass": "OneLineListItem",
-                "text": "Setting",
-                "on_release": self.on_setting_menu_clicked,
+                "text": "About",
+                "on_release": self.on_about_menu_clicked,
             }
         ]
 
@@ -298,22 +300,10 @@ class MainScreen(Screen):
         self.toolbar_menu.caller = button
         self.toolbar_menu.open()
 
-    def on_setting_menu_clicked(self):
+    def on_about_menu_clicked(self):
         self.toolbar_menu.dismiss()
-        self.app.sm.switch_to(screen=SettingScreen(self.app, self))
-
-
-class SettingScreen(Screen):
-    app = ObjectProperty()
-    parent_screen = ObjectProperty()
-
-    def __init__(self, app: MainApp, parent_screen: Screen, **kw):
-        super().__init__(**kw)
-        self.app = app
-        self.parent_screen = parent_screen
-
-    def on_leave_button_clicked(self):
-        self.app.sm.switch_to(self.parent_screen, direction='left')
+        Builder.load_file('about.kv')
+        self.app.sm.switch_to(screen=AboutScreen(self.app, self))
 
 
 class MainApp(MDApp):

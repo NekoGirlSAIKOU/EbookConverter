@@ -9,7 +9,8 @@ pillow>=8.0.1
 python-dateutil>=2.8.1
 setuptools>=50.3.2
 tinycss>=0.4
+chardet
 kivy
 kivymd
 plyer
-chardet
+buildozer

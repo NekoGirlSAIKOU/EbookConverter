@@ -34,26 +34,6 @@
 
 
 
-<SettingScreen>:
-    toolbar: toolbar
-
-    MDBoxLayout:
-        orientation: 'vertical'
-        MDToolbar:
-            id: toolbar
-            title: "Ebook Converter"
-            left_action_items: [["arrow-left", lambda x: root.on_leave_button_clicked()]]
-        ScrollView:
-            MDBoxLayout:
-                orientation: 'vertical'
-                padding: dp(48)
-                spacing: dp(15)
-                adaptive_height: True
-                MDRectangleFlatButton:
-                    text: "Test"
-                    pos_hint: {"center_x": 0.5}
-
-
 
 <ConvertBottomNavigationPage>:
     btn_select: btn_select
