@@ -15,6 +15,22 @@ Builder.load_file('format_setting_ui/BaseInputSettingUi.kv')
 Builder.load_file('format_setting_ui/EpubInputSettingUi.kv')
 
 
+def str2optional_str(s: str):
+    """convert 'None' and 'null' to None"""
+    if s.lower() == 'none' or s.lower() == 'null':
+        return None
+    else:
+        return s
+
+
+def optional_str2str(s: Optional[str]):
+    """convert None to 'null'"""
+    if s is None:
+        return 'null'
+    else:
+        return s
+
+
 class BaseSettingUi(MDList):
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(**kwargs)
@@ -46,16 +62,16 @@ class BaseOutputSettingUi(BaseSettingUi):
 
     def fill_settings(self):
         """FIll settings map using default settings"""
-        self.setting_map['--title'] = self.setting_map.get('--title', '')
+        self.setting_map['--title'] = self.setting_map.get('--title', None)
 
     def update_ui(self):
         """Update UI to show updated setting"""
-        self.tf_book_title.text = self.setting_map['--title']
+        self.tf_book_title.text = optional_str2str(self.setting_map['--title'])
 
     def update_setting(self):
         """update setting to save UI changes"""
         print('update_setting: save tf_book_title: ', self.tf_book_title.text)
-        self.setting_map['--title'] = self.tf_book_title.text
+        self.setting_map['--title'] = str2optional_str(self.tf_book_title.text)
 
 
 class MobiOutputSettingUi(BaseOutputSettingUi):
@@ -76,13 +92,13 @@ class MobiOutputSettingUi(BaseOutputSettingUi):
 
     def update_ui(self):
         super(MobiOutputSettingUi, self).update_ui()
-        self.tf_file_type.text = self.setting_map['--mobi-file-type']
-        self.tf_personal_doc.text = self.setting_map['--personal-doc']
+        self.tf_file_type.text = optional_str2str(self.setting_map['--mobi-file-type'])
+        self.tf_personal_doc.text = optional_str2str(self.setting_map['--personal-doc'])
 
     def update_setting(self):
         super(MobiOutputSettingUi, self).update_setting()
-        self.setting_map['--mobi-file-type'] = self.tf_file_type.text
-        self.setting_map['--personal-doc'] = self.tf_personal_doc.text
+        self.setting_map['--mobi-file-type'] = str2optional_str(self.tf_file_type.text)
+        self.setting_map['--personal-doc'] = str2optional_str(self.tf_personal_doc.text)
 
 
 class BaseInputSettingUi(BaseSettingUi):
@@ -118,12 +134,12 @@ class EpubInputSettingUi(BaseInputSettingUi):
 
     def fill_settings(self):
         """FIll settings map using default settings"""
-        self.setting_map['--input-encoding'] = self.setting_map.get('--input-encoding', '')
+        self.setting_map['--input-encoding'] = self.setting_map.get('--input-encoding', None)
 
     def update_ui(self):
         """Update UI to show updated setting"""
-        self.tf_input_encoding.text = self.setting_map['--input-encoding']
+        self.tf_input_encoding.text = optional_str2str(self.setting_map['--input-encoding'])
 
     def update_setting(self):
         """update setting to save UI changes"""
-        self.setting_map['--input-encoding'] = self.tf_input_encoding.text
+        self.setting_map['--input-encoding'] = str2optional_str(self.tf_input_encoding.text)

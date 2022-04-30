@@ -133,7 +133,7 @@ class ConvertBottomNavigationPage(ScrollView):
                     if item[1]:
                         r.append(item[0])
                 else:
-                    if item[1]:
+                    if item[1] is not None:
                         r.append(item[0])
                         r.append(item[1])
         return r
