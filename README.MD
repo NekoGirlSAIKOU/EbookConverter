@@ -16,7 +16,7 @@ Currently, following formats are supported:
 - Pure text files (``txt``)(**work**)
 - Mobipocket (``mobi``)(**work**)
 - Kindle (``azw3``, ``azw4``, …)
-- Hyper Text Markup Language (``html``)
+- Hyper Text Markup Language (``html``)(**work**)
 
 Note, that old Microsoft doc format is not supported.
 Some settings related to these formats may 
