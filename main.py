@@ -21,7 +21,7 @@ from kivymd.uix.toolbar import MDToolbar, MDActionTopAppBarButton
 from plyer.utils import platform
 
 from format_setting_ui import MobiOutputSettingUi, BaseSettingUi, BaseOutputSettingUi, BaseInputSettingUi, \
-    EpubInputSettingUi
+    EpubInputSettingUi, MobiInputSettingUi
 from utils_platform import get_file_chooser
 import hooks_calibre
 import hooks_plyer
@@ -68,7 +68,7 @@ class InputBottomNavigationPage(MDBoxLayout):
         if value == 'epub':
             self.current_setting_ui = EpubInputSettingUi(self.setting_map)
         elif value == 'mobi':
-            self.current_setting_ui = BaseInputSettingUi(self.setting_map)
+            self.current_setting_ui = MobiInputSettingUi(self.setting_map)
         else:
             self.current_setting_ui = BaseInputSettingUi(self.setting_map)
 

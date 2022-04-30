@@ -15,6 +15,7 @@ Builder.load_file('format_setting_ui/MobiOutputSettingUi.kv')
 
 Builder.load_file('format_setting_ui/BaseInputSettingUi.kv')
 Builder.load_file('format_setting_ui/EpubInputSettingUi.kv')
+Builder.load_file('format_setting_ui/MobiInputSettingUi.kv')
 
 
 def str2optional_str(s: str):
@@ -146,6 +147,14 @@ class BaseInputSettingUi(BaseSettingUi):
 
 
 class EpubInputSettingUi(BaseInputSettingUi):
+    tf_input_encoding: MDTextField = ObjectProperty()
+
+    def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
+        super().__init__(setting_map, **kwargs)
+        self.bind_settings('--input-encoding', None, self.tf_input_encoding)
+
+
+class MobiInputSettingUi(BaseInputSettingUi):
     tf_input_encoding: MDTextField = ObjectProperty()
 
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
