@@ -26,6 +26,16 @@ from ebook_converter.utils.cleantext import clean_xml_chars
 from ebook_converter.utils.short_uuid import uuid4
 
 
+
+def OPF(name):
+    return '{%s}%s' % (const.OPF2_NS, name)
+
+def XLINK(name):
+    return '{%s}%s' % (const.XLINK_NS, name)
+
+def DC(name):
+    return '{%s}%s' % (const.DC11_NS, name)
+
 def tag(tag_ns, name):
     tag_map = {'calibre': const.CALIBRE_NS,
                'dc': const.DC11_NS,

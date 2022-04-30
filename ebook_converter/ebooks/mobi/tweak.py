@@ -11,7 +11,7 @@ from ebook_converter.ebooks.mobi.reader.mobi8 import Mobi8Reader
 from ebook_converter.ebooks.conversion.plumber import Plumber, create_oebbook
 from ebook_converter.customize.ui import plugin_for_input_format
 from ebook_converter.customize.ui import plugin_for_output_format
-from ebook_converter.utils.ipc.simple_worker import fork_job
+#from ebook_converter.utils.ipc.simple_worker import fork_job
 
 
 __license__ = 'GPL v3'

@@ -17,6 +17,7 @@ from lxml import etree
 
 from ebook_converter import constants as const
 from ebook_converter import CurrentDir
+from ebook_converter.constants import OPF_NAMESPACES
 from ebook_converter.customize.ui import plugin_for_input_format, plugin_for_output_format
 from ebook_converter.ebooks import escape_xpath_attr
 from ebook_converter.ebooks.chardet import xml_to_unicode
@@ -42,7 +43,7 @@ from ebook_converter.ebooks.oeb.polish.utils import (
 )
 from ebook_converter.ptempfile import PersistentTemporaryDirectory, PersistentTemporaryFile
 from ebook_converter.utils.filenames import hardlink_file, nlinks_file
-from ebook_converter.utils.ipc.simple_worker import WorkerError, fork_job
+#from ebook_converter.utils.ipc.simple_worker import WorkerError, fork_job
 from ebook_converter.utils.logging import default_log
 from ebook_converter.utils.zipfile import ZipFile
 
@@ -525,7 +526,7 @@ class Container(ContainerBase):  # {{{
 
     def opf_xpath(self, expr):
         ' Convenience method to evaluate an XPath expression on the OPF file, has the opf: and dc: namespace prefixes pre-defined. '
-        return self.opf.xpath(expr, namespaces=oeb_base.tag('opf', 'namespaces'))
+        return self.opf.xpath(expr, namespaces=OPF_NAMESPACES)
 
     def has_name(self, name):
         ''' Return True iff a file with the same canonical name as that specified exists. Unlike :meth:`exists` this method is always case-sensitive. '''
