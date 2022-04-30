@@ -100,10 +100,20 @@ class BaseSettingUi(MDList):
 
 class BaseOutputSettingUi(BaseSettingUi):
     tf_book_title: MDTextField = ObjectProperty()
+    tf_book_author: MDTextField = ObjectProperty()
+    tf_book_series: MDTextField = ObjectProperty()
+    tf_book_series_index: MDTextField = ObjectProperty()
+    tf_book_tags: MDTextField = ObjectProperty()
+    tf_book_language: MDTextField = ObjectProperty()
 
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(setting_map, **kwargs)
         self.bind_settings('--title', None, self.tf_book_title)
+        self.bind_settings('--authors', None, self.tf_book_author)
+        self.bind_settings('--series', None, self.tf_book_series)
+        self.bind_settings('--series-index', None, self.tf_book_series_index)
+        self.bind_settings('--tags', None, self.tf_book_tags)
+        self.bind_settings('--language', None, self.tf_book_language)
 
 
 class MobiOutputSettingUi(BaseOutputSettingUi):
