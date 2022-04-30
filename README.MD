@@ -38,7 +38,7 @@ Not tested.
 Currently, following formats are supported:
 
 - Broadband eBooks (shortened as BBeB) (``lrf``)
-- EPUB v2 (``epub``)
+- EPUB v2 (``epub``)(**work**)
 - Mobipocket (``mobi``)(**work**)
 - Microsoft Word (``docx``)
 - zipped HTML file with additional assets, like images (``htmlz``)
