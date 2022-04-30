@@ -60,24 +60,29 @@ class BaseOutputSettingUi(BaseSettingUi):
 
 class MobiOutputSettingUi(BaseOutputSettingUi):
     tf_file_type: MDTextField = ObjectProperty()
+    tf_personal_doc: MDTextField = ObjectProperty()
 
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(setting_map, **kwargs)
         self.supported_settings.extend([
-            '--mobi-file-type'
+            '--mobi-file-type',
+            '--personal-doc'
         ])
 
     def fill_settings(self):
         super(MobiOutputSettingUi, self).fill_settings()
         self.setting_map['--mobi-file-type'] = self.setting_map.get('--mobi-file-type', 'old')
+        self.setting_map['--personal-doc'] = self.setting_map.get('--personal-doc', '[PDOC]')
 
     def update_ui(self):
         super(MobiOutputSettingUi, self).update_ui()
         self.tf_file_type.text = self.setting_map['--mobi-file-type']
+        self.tf_personal_doc.text = self.setting_map['--personal-doc']
 
     def update_setting(self):
         super(MobiOutputSettingUi, self).update_setting()
         self.setting_map['--mobi-file-type'] = self.tf_file_type.text
+        self.setting_map['--personal-doc'] = self.tf_personal_doc.text
 
 
 class BaseInputSettingUi(BaseSettingUi):
