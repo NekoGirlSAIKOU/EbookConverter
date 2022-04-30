@@ -13,37 +13,27 @@ Currently, following formats are supported:
 
 - Microsoft Word 2007 and up (``docx``)(**may not work**)
 - EPUB, both v2 and v3 (``epub``)(**work**)
-- LibreOffice (``odt``)
 - Pure text files (``txt``)(**work**)
-- Several PalmOS (``pdb``) readers support:
-
-  - Plucker
-    
-  - Adobe Reader for PalmOS
-  - eReader various formats
-  - Weasel Reader
-  - Haodoo Reader
-
-- Rich Text Format (``rtf``)
 - Mobipocket (``mobi``)(**work**)
 - Kindle (``azw3``, ``azw4``, …)
-- FictionBook (``fb2``)
 - Hyper Text Markup Language (``html``)
-- Adobe Portable Document Format (``pdf``)
-- Broadband eBooks (shortened as BBeB) (``lrf``)
 
 Note, that old Microsoft doc format is not supported.
+Some settings related to these formats may 
+not work. Report an issue if you find something 
+not working.
 
 # Output formats
-Not tested.
 Currently, following formats are supported:
 
-- Broadband eBooks (shortened as BBeB) (``lrf``)
 - EPUB v2 (``epub``)(**work**)
 - Mobipocket (``mobi``)(**work**)
 - Microsoft Word (``docx``)(**work**)
-- zipped HTML file with additional assets, like images (``htmlz``)
 - Text (``txt``)(**work**)
+
+Note, some settings related to these formats may 
+not work. Report an issue if you find something 
+not working.
 
 # Build
 Install required packages:
