@@ -1,20 +1,20 @@
 <MobiOutputSettingUi>
     tf_file_type: tf_file_type
-    tf_personal_doc: tf_personal_doc
     chk_lbl_dont_compress: chk_lbl_dont_compress
     chk_lbl_no_inline_toc: chk_lbl_no_inline_toc
     chk_lbl_share_not_sync: chk_lbl_share_not_sync
+    chk_lbl_mobi_toc_at_start: chk_lbl_mobi_toc_at_start
+    chk_lbl_mobi_keep_original_images: chk_lbl_mobi_keep_original_images
+    tf_toc_title: tf_toc_title
+    tf_personal_doc: tf_personal_doc
+    chk_lbl_mobi_ignore_margins: chk_lbl_mobi_ignore_margins
+
     MDTextField:
         id: tf_file_type
         hint_text: "Mobi file type(Unsupported for now)"
         helper_text: "old, new or both"
         helper_text_mode: "on_focus"
         disabled: True
-    MDTextField:
-        id: tf_personal_doc
-        hint_text: "--personal-doc"
-        helper_text: "Tag for MOBI files to be marked as personal documents."
-        helper_text_mode: "on_focus"
     CheckboxLabel:
         id: chk_lbl_dont_compress
         text: "--dont-compress"
@@ -27,4 +27,25 @@
         id: chk_lbl_share_not_sync
         text: "--share-not-sync"
         helper_text: "Enable sharing of book content via Facebook etc."
-
+    CheckboxLabel:
+        id: chk_lbl_mobi_toc_at_start
+        text: "--mobi-toc-at-start"
+        helper_text: "Not recommended. When adding the Table of Contents to the book, add it at the start of the book instead of the end."
+    CheckboxLabel:
+        id: chk_lbl_mobi_keep_original_images
+        text: "--mobi-keep-original-images"
+        helper_text: "Useful if your document contains lots of GIF/PNG images that become very large when converted to JPEG."
+    MDTextField:
+        id: tf_toc_title
+        hint_text: "--toc-title"
+        helper_text: "Title for any generated in-line table of contents."
+        helper_text_mode: "on_focus"
+    MDTextField:
+        id: tf_personal_doc
+        hint_text: "--personal-doc"
+        helper_text: "Tag for MOBI files to be marked as personal documents."
+        helper_text_mode: "on_focus"
+    CheckboxLabel:
+        id: chk_lbl_mobi_ignore_margins
+        text: "--mobi-ignore-margins"
+        helper_text: "Ignore margins in the input document."

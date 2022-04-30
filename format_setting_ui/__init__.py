@@ -108,18 +108,26 @@ class BaseOutputSettingUi(BaseSettingUi):
 
 class MobiOutputSettingUi(BaseOutputSettingUi):
     tf_file_type: MDTextField = ObjectProperty()
-    tf_personal_doc: MDTextField = ObjectProperty()
     chk_lbl_dont_compress: CheckboxLabel = ObjectProperty()
     chk_lbl_no_inline_toc: CheckboxLabel = ObjectProperty()
     chk_lbl_share_not_sync: CheckboxLabel = ObjectProperty()
+    chk_lbl_mobi_toc_at_start: CheckboxLabel = ObjectProperty()
+    chk_lbl_mobi_keep_original_images: CheckboxLabel = ObjectProperty()
+    tf_toc_title: MDTextField = ObjectProperty()
+    tf_personal_doc: MDTextField = ObjectProperty()
+    chk_lbl_mobi_ignore_margins: CheckboxLabel = ObjectProperty()
 
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(setting_map, **kwargs)
         self.bind_settings('--mobi-file-type', 'old', self.tf_file_type)
-        self.bind_settings('--personal-doc', '[PDOC]', self.tf_personal_doc)
         self.bind_settings('--dont-compress', False, self.chk_lbl_dont_compress)
         self.bind_settings('--no-inline-toc', False, self.chk_lbl_no_inline_toc)
         self.bind_settings('--share-not-sync', False, self.chk_lbl_share_not_sync)
+        self.bind_settings('--mobi-toc-at-start', False, self.chk_lbl_mobi_toc_at_start)
+        self.bind_settings('--mobi-keep-original-images', False, self.chk_lbl_mobi_keep_original_images)
+        self.bind_settings('--toc-title', None, self.tf_toc_title)
+        self.bind_settings('--personal-doc', '[PDOC]', self.tf_personal_doc)
+        self.bind_settings('--mobi-ignore-margins', False, self.chk_lbl_mobi_ignore_margins)
 
 
 class BaseInputSettingUi(BaseSettingUi):
