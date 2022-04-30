@@ -11,6 +11,7 @@ from kivymd.uix.textfield import MDTextField
 Builder.load_file('format_setting_ui/BaseSettingUi.kv')
 
 Builder.load_file('format_setting_ui/BaseOutputSettingUi.kv')
+Builder.load_file('format_setting_ui/EpubOutputSettingUi.kv')
 Builder.load_file('format_setting_ui/MobiOutputSettingUi.kv')
 
 Builder.load_file('format_setting_ui/BaseInputSettingUi.kv')
@@ -139,6 +140,32 @@ class MobiOutputSettingUi(BaseOutputSettingUi):
         self.bind_settings('--toc-title', None, self.tf_toc_title)
         self.bind_settings('--personal-doc', '[PDOC]', self.tf_personal_doc)
         self.bind_settings('--mobi-ignore-margins', False, self.chk_lbl_mobi_ignore_margins)
+
+
+class EpubOutputSettingUi(BaseOutputSettingUi):
+    chk_lbl_epub_toc_at_end: CheckboxLabel = ObjectProperty()
+    tf_epub_version: MDTextField = ObjectProperty()
+    chk_lbl_no_svg_cover: CheckboxLabel = ObjectProperty()
+    chk_lbl_dont_split_on_page_breaks: CheckboxLabel = ObjectProperty()
+    chk_lbl_epub_inline_toc: CheckboxLabel = ObjectProperty()
+    chk_lbl_epub_flatten: CheckboxLabel = ObjectProperty()
+    tf_toc_title: MDTextField = ObjectProperty()
+    tf_flow_size: MDTextField = ObjectProperty()
+    chk_lbl_no_default_epub_cover: CheckboxLabel = ObjectProperty()
+    chk_lbl_preserve_cover_aspect_ratio: CheckboxLabel = ObjectProperty()
+
+    def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
+        super().__init__(setting_map, **kwargs)
+        self.bind_settings('--epub-toc-at-end', False, self.chk_lbl_epub_toc_at_end)
+        self.bind_settings('--epub-version', '2', self.tf_epub_version)
+        self.bind_settings('--no-svg-cover', False, self.chk_lbl_no_svg_cover)
+        self.bind_settings('--dont-split-on-page-breaks', False, self.chk_lbl_dont_split_on_page_breaks)
+        self.bind_settings('--epub-inline-toc', False, self.chk_lbl_epub_inline_toc)
+        self.bind_settings('--epub-flatten', False, self.chk_lbl_epub_flatten)
+        self.bind_settings('--toc-title', None, self.tf_toc_title)
+        self.bind_settings('--flow-size', None, self.tf_flow_size)
+        self.bind_settings('--no-default-epub-cover', False, self.chk_lbl_no_default_epub_cover)
+        self.bind_settings('--preserve-cover-aspect-ratio', True, self.chk_lbl_preserve_cover_aspect_ratio)
 
 
 class BaseInputSettingUi(BaseSettingUi):

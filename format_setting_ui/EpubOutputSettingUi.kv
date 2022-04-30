@@ -1,0 +1,60 @@
+<EpubOutputSettingUi>:
+    chk_lbl_epub_toc_at_end: chk_lbl_epub_toc_at_end
+    tf_epub_version: tf_epub_version
+    chk_lbl_no_svg_cover: chk_lbl_no_svg_cover
+    chk_lbl_dont_split_on_page_breaks: chk_lbl_dont_split_on_page_breaks
+    chk_lbl_epub_inline_toc: chk_lbl_epub_inline_toc
+    chk_lbl_epub_flatten: chk_lbl_epub_flatten
+    tf_toc_title: tf_toc_title
+    tf_flow_size: tf_flow_size
+    chk_lbl_no_default_epub_cover: chk_lbl_no_default_epub_cover
+    chk_lbl_preserve_cover_aspect_ratio: chk_lbl_preserve_cover_aspect_ratio
+
+    CheckboxLabel:
+        id: chk_lbl_epub_toc_at_end
+        text: "--epub-toc-at-end"
+        helper_text: "Put the inserted inline Table of Contents at the end of the book instead of the start."
+    MDTextField:
+        id: tf_epub_version
+        hint_text: "Epub version:"
+        helper_text: "2 or 3. The version of the EPUB file to generate. EPUB 2 is the most widely compatible, only use EPUB 3 if you know you actually need it."
+        helper_text_mode: "on_focus"
+    CheckboxLabel:
+        id: chk_lbl_no_svg_cover
+        text: "--no-svg-cover"
+        helper_text: "Do not use SVG for the book cover."
+    CheckboxLabel:
+        id: chk_lbl_dont_split_on_page_breaks
+        text: "--dont-split-on-page-breaks"
+        helper_text: "Turn off splitting at page breaks."
+    CheckboxLabel:
+        id: chk_lbl_epub_inline_toc
+        text: "--epub-inline-toc"
+        helper_text: "Insert an inline Table of Contents that will appear as part of the main book content."
+    CheckboxLabel:
+        id: chk_lbl_epub_flatten
+        text: "--epub-flatten"
+        helper_text: "It will flatten the file system inside the EPUB, putting all files into the top level."
+    MDTextField:
+        id: tf_toc_title
+        hint_text: "Table of contents title:"
+        helper_text: "Title for any generated in-line table of contents."
+        helper_text_mode: "on_focus"
+    MDTextField:
+        id: tf_flow_size
+        hint_text: "--flow-size:"
+        helper_text: "Split all HTML files larger than this size (in KB)."
+        helper_text_mode: "on_focus"
+    CheckboxLabel:
+        id: chk_lbl_no_default_epub_cover
+        text: "--no-default-epub-cover"
+        helper_text: "This option disables the generation of cover even if there is no cover from origin ebook."
+    CheckboxLabel:
+        id: chk_lbl_preserve_cover_aspect_ratio
+        text: "--preserve-cover-aspect-ratio"
+        helper_text: "Without this option the image may be slightly distorted, but there will be no borders."
+
+
+
+
+

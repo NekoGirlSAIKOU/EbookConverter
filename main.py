@@ -21,7 +21,7 @@ from kivymd.uix.toolbar import MDToolbar, MDActionTopAppBarButton
 from plyer.utils import platform
 
 from format_setting_ui import MobiOutputSettingUi, BaseSettingUi, BaseOutputSettingUi, BaseInputSettingUi, \
-    EpubInputSettingUi, MobiInputSettingUi
+    EpubInputSettingUi, MobiInputSettingUi, EpubOutputSettingUi
 from utils_platform import get_file_chooser
 import hooks_calibre
 import hooks_plyer
@@ -246,7 +246,7 @@ class OutputBottomNavigationPage(MDBoxLayout):
             self.scroll_view.remove_widget(self.current_setting_ui)
             pass
         if value == 'epub':
-            self.current_setting_ui = BaseOutputSettingUi(self.setting_map)
+            self.current_setting_ui = EpubOutputSettingUi(self.setting_map)
         elif value == 'mobi':
             self.current_setting_ui = MobiOutputSettingUi(self.setting_map)
         else:
