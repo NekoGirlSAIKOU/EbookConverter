@@ -24,7 +24,7 @@ from plyer.utils import platform
 from about import AboutScreen
 from format_setting_ui import MobiOutputSettingUi, BaseSettingUi, BaseOutputSettingUi, BaseInputSettingUi, \
     EpubInputSettingUi, MobiInputSettingUi, EpubOutputSettingUi, DocxInputSettingUi, DocxOutputSettingUi, \
-    TxtOutputSettingUi, TxtInputSettingUi, HtmlInputSettingUi
+    TxtOutputSettingUi, TxtInputSettingUi, HtmlInputSettingUi, Azw3InputSettingUi
 from utils_platform import get_file_chooser
 import hooks_calibre
 import hooks_plyer
@@ -78,6 +78,8 @@ class InputBottomNavigationPage(MDBoxLayout):
             self.current_setting_ui = TxtInputSettingUi(self.setting_map)
         elif value == 'html' or value == 'htm':
             self.current_setting_ui = HtmlInputSettingUi(self.setting_map)
+        elif value == 'azw3':
+            self.current_setting_ui = Azw3InputSettingUi(self.setting_map)
         else:
             self.current_setting_ui = BaseInputSettingUi(self.setting_map)
 

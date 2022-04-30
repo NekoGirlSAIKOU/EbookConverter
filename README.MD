@@ -8,32 +8,31 @@ The ebook-converter is modified and based on
 its newest source code seems broken.
 
 # Input formats
-Not tested.
 Currently, following formats are supported:
 
 - Microsoft Word 2007 and up (``docx``)(**may not work**)
-- EPUB, both v2 and v3 (``epub``)(**work**)
-- Pure text files (``txt``)(**work**)
-- Mobipocket (``mobi``)(**work**)
-- Kindle (``azw3``, ``azw4``, …)
-- Hyper Text Markup Language (``html``)(**work**)
+- EPUB, both v2 and v3 (``epub``)
+- Pure text files (``txt``)
+- Mobipocket (``mobi``)
+- Kindle (``azw3``)
+- Hyper Text Markup Language (``html``)
 
 Note, that old Microsoft doc format is not supported.
 Some settings related to these formats may 
 not work. Report an issue if you find something 
-not working.
+wrong or not working.
 
 # Output formats
 Currently, following formats are supported:
 
-- EPUB v2 (``epub``)(**work**)
-- Mobipocket (``mobi``)(**work**)
-- Microsoft Word (``docx``)(**work**)
-- Text (``txt``)(**work**)
+- EPUB v2 and v3 (``epub``)
+- Mobipocket (``mobi``)
+- Microsoft Word (``docx``)
+- Text (``txt``)
 
 Note, some settings related to these formats may 
 not work. Report an issue if you find something 
-not working.
+wrong or not working.
 
 # Build
 Install required packages:

@@ -22,6 +22,7 @@ Builder.load_file('format_setting_ui/MobiInputSettingUi.kv')
 Builder.load_file('format_setting_ui/DocxInputSettingUi.kv')
 Builder.load_file('format_setting_ui/TxtInputSettingUi.kv')
 Builder.load_file('format_setting_ui/HtmlInputSettingUi.kv')
+Builder.load_file('format_setting_ui/Azw3InputSettingUi.kv')
 
 
 def str2optional_str(s: str):
@@ -293,3 +294,11 @@ class HtmlInputSettingUi(BaseInputSettingUi):
         self.bind_settings('--input-encoding', None, self.tf_input_encoding)
         self.bind_settings('--breadth-first', False, self.chk_lbl_breadth_first)
         self.bind_settings('--dont-package', False, self.chk_lbl_dont_package)
+
+
+class Azw3InputSettingUi(BaseInputSettingUi):
+    tf_input_encoding: MDTextField = ObjectProperty()
+
+    def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
+        super().__init__(setting_map, **kwargs)
+        self.bind_settings('--input-encoding', None, self.tf_input_encoding)
