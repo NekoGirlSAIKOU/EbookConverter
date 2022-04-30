@@ -16,7 +16,6 @@ from ebook_converter.ebooks.chardet import xml_to_unicode
 from ebook_converter import replace_entities
 from ebook_converter.utils.date import parse_date, is_date_undefined
 
-
 __license__ = 'GPL v3'
 __copyright__ = '2013, Kovid Goyal <kovid at kovidgoyal.net>'
 
@@ -42,12 +41,13 @@ COMMENT_NAMES = {
 }
 
 META_NAMES = {
-    'title' : ('dc.title', 'dcterms.title', 'title'),
+    'title': ('dc.title', 'dcterms.title', 'title'),
     'authors': ('author', 'dc.creator.aut', 'dcterms.creator.aut', 'dc.creator'),
     'publisher': ('publisher', 'dc.publisher', 'dcterms.publisher'),
     'isbn': ('isbn',),
     'languages': ('dc.language', 'dcterms.language'),
-    'pubdate': ('pubdate', 'date of publication', 'dc.date.published', 'dc.date.publication', 'dc.date.issued', 'dcterms.issued'),
+    'pubdate': (
+    'pubdate', 'date of publication', 'dc.date.published', 'dc.date.publication', 'dc.date.issued', 'dcterms.issued'),
     'timestamp': ('timestamp', 'date of creation', 'dc.date.created', 'dc.date.creation', 'dcterms.created'),
     'series': ('series',),
     'series_index': ('seriesnumber', 'series_index', 'series.index'),
@@ -55,9 +55,8 @@ META_NAMES = {
     'comments': ('comments', 'dc.description'),
     'tags': ('tags',),
 }
-rmap_comment = {v:k for k, v in COMMENT_NAMES.items()}
-rmap_meta = {v:k for k, l in META_NAMES.items() for v in l}
-
+rmap_comment = {v: k for k, v in COMMENT_NAMES.items()}
+rmap_meta = {v: k for k, l in META_NAMES.items() for v in l}
 
 # Extract an HTML attribute value, supports both single and double quotes and
 # single quotes inside double quotes and vice versa.
@@ -79,7 +78,10 @@ def handle_comment(data, comment_tags):
 
 
 def parse_metadata(src):
-    root:etree._Element = etree.fromstring(src)
+    try:
+        root: etree._Element = etree.fromstring(src)
+    except:
+        root: etree._Element = etree.fromstring(src, parser=etree.HTMLParser())
     comment_tags = defaultdict(list)
     meta_tags = defaultdict(list)
     meta_tag_ids = defaultdict(list)
@@ -176,7 +178,9 @@ def get_metadata_(src, encoding=None):
     for field in ('comments',):
         val = get(field)
         if val:
-            setattr(mi, field, val.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", '&apos;'))
+            setattr(mi, field,
+                    val.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace(
+                        "'", '&apos;'))
 
     # Date fields
     for field in ('pubdate', 'timestamp'):
@@ -230,7 +234,7 @@ def get_metadata_(src, encoding=None):
             mi.tags = tags
 
     # IDENTIFIERS
-    for (k,v) in meta_tag_ids.items():
+    for (k, v) in meta_tag_ids.items():
         v = [x.strip() for x in v if x.strip()]
         if v:
             mi.set_identifier(k, v[0])
@@ -242,8 +246,8 @@ class MetadataHtmlTest(unittest.TestCase):
 
     def compare_metadata(self, meta_a, meta_b):
         for attr in (
-            'title', 'authors', 'publisher', 'isbn', 'languages', 'pubdate', 'timestamp', 'series',
-            'series_index', 'rating', 'comments', 'tags', 'identifiers'
+                'title', 'authors', 'publisher', 'isbn', 'languages', 'pubdate', 'timestamp', 'series',
+                'series_index', 'rating', 'comments', 'tags', 'identifiers'
         ):
             self.assertEqual(getattr(meta_a, attr), getattr(meta_b, attr))
 
