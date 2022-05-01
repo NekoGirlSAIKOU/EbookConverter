@@ -145,7 +145,7 @@ class MobiOutputSettingUi(BaseOutputSettingUi):
 
     def __init__(self, setting_map: Dict[str, Optional[Union[str, bool]]], **kwargs):
         super().__init__(setting_map, **kwargs)
-        self.bind_settings('--mobi-file-type', 'old', self.tf_file_type)
+        self.bind_settings('--mobi-file-type', 'both', self.tf_file_type)
         self.bind_settings('--dont-compress', False, self.chk_lbl_dont_compress)
         self.bind_settings('--no-inline-toc', False, self.chk_lbl_no_inline_toc)
         self.bind_settings('--share-not-sync', False, self.chk_lbl_share_not_sync)
