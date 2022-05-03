@@ -1,5 +1,6 @@
 import webbrowser
 
+from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 from kivy.uix.screenmanager import Screen
 from kivymd.app import MDApp
@@ -8,6 +9,7 @@ from kivymd.app import MDApp
 class AboutScreen(Screen):
     app = ObjectProperty()
     parent_screen = ObjectProperty()
+    Builder.load_file("about.kv")
 
     def __init__(self, app: MDApp, parent_screen: Screen, **kw):
         super().__init__(**kw)

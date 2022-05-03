@@ -315,7 +315,6 @@ class MainScreen(Screen):
 
     def on_about_menu_clicked(self):
         self.toolbar_menu.dismiss()
-        Builder.load_file('about.kv')
         self.app.sm.switch_to(screen=AboutScreen(self.app, self))
 
 
