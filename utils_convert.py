@@ -1,8 +1,17 @@
 import mimetypes
+import sys
 from threading import Thread
 
 from ebook_converter.ebooks.conversion.cli import ProgressBar
 from ebook_converter.utils.logging import Log
+
+try:
+    from plyer.utils import platform
+except ImportError:
+    platform = sys.platform
+
+if platform == 'android':
+    from android_file_chooser_saf import UriFile
 
 
 class MyProgressBar(ProgressBar):
@@ -45,8 +54,6 @@ class ConvertThread(Thread):
         self.log = log
         self.reporter = reporter
 
-        self.output_file_path = None
-
     def run(self) -> None:
         try:
             from ebook_converter.ebooks.conversion.cli import main as ebook_converter_main
@@ -71,7 +78,29 @@ class ConvertThread(Thread):
             import ebook_converter.ebooks.mobi.reader.mobi8
             import ebook_converter.utils.wmf.emf
 
-            ebook_converter_main(args=self.args, log=self.log, reporter=self.reporter)
+            input_file = None
+            output_file = None
+
+            if platform == 'android':
+                real_args = self.args.copy()
+                input_file = real_args[1]
+                output_file = real_args[2]
+
+                if isinstance(input_file, UriFile):
+                    real_args[1] = input_file.file_name  # todo: use file in temp dir.
+                    self.log.info(f"Copy input file to {real_args[1]}")
+                    input_file.write_to_file(real_args[1])
+
+                if isinstance(output_file, UriFile):
+                    real_args[2] = output_file.file_name  # todo: use file in temp dir.
+            else:
+                real_args = self.args
+
+            ebook_converter_main(args=real_args, log=self.log, reporter=self.reporter)
+            if platform == 'android':
+                if isinstance(output_file, UriFile):
+                    self.log.info(f"Copy generated file to target: {output_file.path}")
+                    output_file.read_from_file(real_args[2])
         except Exception as e:
             if isinstance(self.reporter, MyProgressBar) and self.reporter.call_back is not ...:
                 self.reporter.call_back(100, f"Failed: {type(e).__name__}: {e}")

@@ -164,7 +164,7 @@ class ConvertBottomNavigationPage(ScrollView):
             self.log(f"Select input file: {file_path}")
             self.btn_convert.disabled = False
             self.get_root_window()
-            file_path_str = str(file_path)
+            file_path_str = str(file_path)  # Make sure this is str because this may be UriFile
             self.input_format = file_path_str[file_path_str.rfind('.') + 1:]
 
     def start_convert(self):
@@ -195,15 +195,7 @@ class ConvertBottomNavigationPage(ScrollView):
             self.update_setting()
             log.info("Convert setting: ", self.setting_list)
 
-            if platform == 'android':
-                from android_file_chooser_saf import UriFile
-                assert isinstance(self.file_path, UriFile)
-                assert isinstance(output_file_path, UriFile)
-                self.file_path.write_to_file(self.file_path.file_name)  # todo: Write to tmp path!!!
-                # todo: Write output epub to tmp path instead of output_file_path.file_name
-                args = ["ebook-convert", self.file_path.file_name, output_file_path.file_name]
-            else:
-                args = ["ebook-convert", self.file_path, output_file_path]
+            args = ["ebook-convert", self.file_path, output_file_path]
 
             args.extend(self.setting_list)
             self.log('Start converting')
@@ -211,8 +203,6 @@ class ConvertBottomNavigationPage(ScrollView):
 
             self.convert_thread = ConvertThread(args=args, log=log,
                                                 reporter=progress)
-            if platform == 'android':
-                self.convert_thread.output_file_path = output_file_path
             self.convert_thread.start()
         else:
             self.on_progress_changed(100)
@@ -222,14 +212,6 @@ class ConvertBottomNavigationPage(ScrollView):
             self.label_message.text = msg
         self.progress_bar.value = percent
         if percent == 100:
-            if platform == 'android':
-                # On android platform we save output file to SAF.tmp.
-                # This file chooser will copy SAF_W.tmp to selected file.
-                from android_file_chooser_saf import UriFile
-                assert isinstance(self.convert_thread.output_file_path,UriFile)
-                self.convert_thread.output_file_path.read_from_file(
-                    self.convert_thread.output_file_path.file_name
-                )
             self.btn_select.disabled = False
             self.convert_thread = None
 

@@ -468,4 +468,4 @@ class UriFile:
         fos.close()
 
     def __str__(self):
-        return self.file_name
+        return self.path
