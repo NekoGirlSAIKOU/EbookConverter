@@ -156,6 +156,7 @@ class AndroidFileChooserSAF(FileChooser):
 
         if result_code != Activity.RESULT_OK:
             # The action had been cancelled.
+            self._handle_selection([])
             return
         uri = data.getData()
         # selection = self._resolve_uri(data.getData()) or []
