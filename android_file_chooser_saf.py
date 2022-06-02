@@ -132,7 +132,7 @@ class AndroidFileChooserSAF(FileChooser):
         )
         extra_title = kwargs.pop('path', None)
         if extra_title:
-            file_intent.putExtra(Intent.EXTRA_TITLE, extra_title)
+            file_intent.putExtra(Intent.EXTRA_TITLE, String(os.path.basename(extra_title)))
 
         # start a new activity from PythonActivity
         # which creates a filechooser via intent
