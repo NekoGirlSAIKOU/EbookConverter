@@ -87,8 +87,6 @@ class AndroidFileChooserSAF(FileChooser):
         self.select_code = randint(123456, 654321)
         self.selection = None
 
-        self.intent_action = Intent.ACTION_OPEN_DOCUMENT
-
         # bind a function for a response from filechooser activity
         activity.bind(on_activity_result=self._on_activity_result)
 
@@ -120,12 +118,12 @@ class AndroidFileChooserSAF(FileChooser):
         # create Intent for opening
         action = kwargs.pop('action', 'open')
         if action == 'open':
-            self.intent_action = Intent.ACTION_OPEN_DOCUMENT
+            file_intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         elif action == 'save':
-            self.intent_action = Intent.ACTION_CREATE_DOCUMENT
+            file_intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
         else:
             raise Exception("Unknown action")
-        file_intent = Intent(self.intent_action)
+
         file_intent.setType('*/*')
         file_intent.addCategory(
             Intent.CATEGORY_OPENABLE
