@@ -43,7 +43,7 @@ using that result will use an incorrect one i.e. the default value of
 
 .. versionadded:: 1.4.0
 '''
-
+import os
 from os.path import join, basename
 from random import randint
 
@@ -125,6 +125,9 @@ class MyAndroidFileChooser(FileChooser):
         file_intent.addCategory(
             Intent.CATEGORY_OPENABLE
         )
+        extra_title = kwargs.pop('path', None)
+        if extra_title:
+            file_intent.putExtra(Intent.EXTRA_TITLE, String(os.path.basename(extra_title)))
 
         # start a new activity from PythonActivity
         # which creates a filechooser via intent
