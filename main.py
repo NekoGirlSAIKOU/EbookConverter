@@ -181,7 +181,7 @@ class ConvertBottomNavigationPage(ScrollView):
                 )
                 self.on_open_output_file(file_paths)
         else:
-            self.on_progress_changed(100)   # No file chooser
+            raise Exception("No file chooser")
 
     def on_open_output_file(self, output_file_path):
         if output_file_path:
@@ -205,7 +205,9 @@ class ConvertBottomNavigationPage(ScrollView):
                                                 reporter=progress)
             self.convert_thread.start()
         else:
-            self.on_progress_changed(100)
+            # No file is selected
+            self.btn_select.disabled = False
+            self.btn_convert.disabled = False
 
     def on_progress_changed(self, percent: int, msg: str = ...):
         if msg is not ...:
