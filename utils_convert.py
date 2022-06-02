@@ -45,6 +45,8 @@ class ConvertThread(Thread):
         self.log = log
         self.reporter = reporter
 
+        self.output_file_path = None
+
     def run(self) -> None:
         try:
             from ebook_converter.ebooks.conversion.cli import main as ebook_converter_main

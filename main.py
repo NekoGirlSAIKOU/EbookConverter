@@ -90,7 +90,6 @@ class InputBottomNavigationPage(MDBoxLayout):
     def setting_map(self):
         return self.convert_bottom_navigation_page.setting_map
 
-
     @property
     def supported_settings(self):
         return self.current_setting_ui.supported_settings
@@ -115,7 +114,7 @@ class ConvertBottomNavigationPage(ScrollView):
         super().__init__(**kwargs)
         self.file_path = None
         self.setting_map: Dict[str, Optional[Union[str, bool]]] = {}
-        self.convert_thread:Optional[Thread] = None
+        self.convert_thread: Optional[Thread] = None
 
     @property
     def input_format(self):
@@ -157,7 +156,7 @@ class ConvertBottomNavigationPage(ScrollView):
                 file_paths = self.file_chooser.open_file()
                 self.on_open_file(file_paths)
 
-    @mainthread # Android may callback this on other thread.
+    @mainthread  # Android may callback this on other thread.
     def on_open_file(self, file_path):
         if file_path:
             file_path = file_path[0]
@@ -165,33 +164,75 @@ class ConvertBottomNavigationPage(ScrollView):
             self.log(f"Select input file: {file_path}")
             self.btn_convert.disabled = False
             self.get_root_window()
-            self.input_format = file_path[file_path.rfind('.') + 1:]
+            file_path_str = str(file_path)
+            self.input_format = file_path_str[file_path_str.rfind('.') + 1:]
 
     def start_convert(self):
-        from utils_convert import MyProgressBar, MyLog
-        from utils_convert import ConvertThread
-        self.label_message.text = "Converting"
-        self.progress_bar.value = 0
-        log = MyLog(print_call_back=self.on_log_callback)
-        progress = MyProgressBar(log, progress_call_back=self.on_progress_changed)
-        self.update_setting()
-        log.info("Convert setting: ", self.setting_list)
-        args = ["ebook-convert", self.file_path,
-                self.file_path + '.' + self.output_bottom_navigation_page.output_format]
-        args.extend(self.setting_list)
-        self.log('Start converting')
-        self.log(f"args: {args}")
+        file_paths = []
+        if self.file_chooser:
+            if platform == 'android':
+                self.file_chooser.save_file(
+                    on_selection=self.on_open_output_file,
+                    path=f'{self.file_path}.{self.output_bottom_navigation_page.output_format}'
+                )
+            else:
+                file_paths = self.file_chooser.save_file(
+                    path=f'{self.file_path}.{self.output_bottom_navigation_page.output_format}'
+                )
+                self.on_open_output_file(file_paths)
+        else:
+            self.on_progress_changed(100)   # No file chooser
 
-        self.convert_thread = ConvertThread(args=args, log=log,
-                                            reporter=progress)
-        self.convert_thread.start()
+    def on_open_output_file(self, output_file_path):
+        if output_file_path:
+            from utils_convert import MyProgressBar, MyLog
+            from utils_convert import ConvertThread
+            output_file_path = output_file_path[0]
+            self.label_message.text = "Converting"
+            self.progress_bar.value = 0
+            log = MyLog(print_call_back=self.on_log_callback)
+            progress = MyProgressBar(log, progress_call_back=self.on_progress_changed)
+            self.update_setting()
+            log.info("Convert setting: ", self.setting_list)
 
-    def on_progress_changed(self, percent: int, msg: str):
-        self.label_message.text = msg
+            if platform == 'android':
+                from android_file_chooser_saf import UriFile
+                assert isinstance(self.file_path, UriFile)
+                assert isinstance(output_file_path, UriFile)
+                self.file_path.write_to_file(self.file_path.file_name)  # todo: Write to tmp path!!!
+                # todo: Write output epub to tmp path instead of output_file_path.file_name
+                args = ["ebook-convert", self.file_path.file_name, output_file_path.file_name]
+            else:
+                args = ["ebook-convert", self.file_path, output_file_path]
+
+            args.extend(self.setting_list)
+            self.log('Start converting')
+            self.log(f"args: {args}")
+
+            self.convert_thread = ConvertThread(args=args, log=log,
+                                                reporter=progress)
+            if platform == 'android':
+                self.convert_thread.output_file_path = output_file_path
+            self.convert_thread.start()
+        else:
+            self.on_progress_changed(100)
+
+    def on_progress_changed(self, percent: int, msg: str = ...):
+        if msg is not ...:
+            self.label_message.text = msg
         self.progress_bar.value = percent
         if percent == 100:
+            if platform == 'android':
+                # On android platform we save output file to SAF.tmp.
+                # This file chooser will copy SAF_W.tmp to selected file.
+                from android_file_chooser_saf import UriFile
+                assert isinstance(self.convert_thread.output_file_path,UriFile)
+                self.convert_thread.output_file_path.read_from_file(
+                    self.convert_thread.output_file_path.file_name
+                )
             self.btn_select.disabled = False
             self.convert_thread = None
+
 
     def on_log_callback(self, level, *args, **kwargs):
         INFO = 1

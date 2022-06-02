@@ -6,9 +6,9 @@ from plyer.utils import platform
 
 def get_file_chooser() -> Optional[FileChooser]:
     if platform == 'android':
-        from plyer.platforms.android.filechooser import AndroidFileChooser
-        from my_android_file_chooser import MyAndroidFileChooser
-        return MyAndroidFileChooser()
+        # from plyer.platforms.android.filechooser import AndroidFileChooser
+        from android_file_chooser_saf import AndroidFileChooserSAF
+        return AndroidFileChooserSAF()
 
     elif platform == 'ios':
         from plyer.platforms.ios.filechooser import IOSFileChooser
