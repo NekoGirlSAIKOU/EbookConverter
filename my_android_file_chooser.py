@@ -113,7 +113,14 @@ class MyAndroidFileChooser(FileChooser):
         )
 
         # create Intent for opening
-        file_intent = Intent(Intent.ACTION_GET_CONTENT)
+        action = kwargs.pop('action', 'open')
+        if action == 'open':
+            file_intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        elif action == 'save':
+            file_intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+        else:
+            raise Exception("Unknown action")
+
         file_intent.setType('*/*')
         file_intent.addCategory(
             Intent.CATEGORY_OPENABLE
@@ -143,13 +150,11 @@ class MyAndroidFileChooser(FileChooser):
 
         if result_code != Activity.RESULT_OK:
             # The action had been cancelled.
-            print("LALALA: The action had been cancelled.")
+            self._handle_selection([])
             return
-        print(f"LALALA: data: {data.getData()}")
         selection = self._resolve_uri(data.getData()) or []
 
         # return value to object
-        print(f"fLALALA: return value to object: {selection}")
         self.selection = [selection]
         # return value via callback
         self._handle_selection([selection])
@@ -390,6 +395,8 @@ class MyAndroidFileChooser(FileChooser):
         mode = kwargs.pop('mode', None)
         if mode == 'open':
             self._open_file(**kwargs)
+        elif mode == 'save':
+            self._open_file(action='save', **kwargs)
 
 
 def instance():
