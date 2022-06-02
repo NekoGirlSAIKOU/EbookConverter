@@ -63,8 +63,11 @@
                 self.disabled = True
                 root.start_convert()
         MDRectangleFlatButton:
+            # This button is for debug. So it is hidden.
             text: "Test Load Modules"
             pos_hint: {"center_x": 0.5}
+            opacity: 0
+            disabled: True
             on_release:
                 root.test_load_modules()
         Label:
